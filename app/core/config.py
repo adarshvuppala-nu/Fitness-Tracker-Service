@@ -1,0 +1,23 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    DATABASE_URL: str
+    DATABASE_HOST: str = "localhost"
+    DATABASE_PORT: int = 5433
+    DATABASE_NAME: str = "fitness_tracker"
+    DATABASE_USER: str = "adarshvuppala"
+    DATABASE_PASSWORD: str
+
+    API_V1_PREFIX: str = "/api/v1"
+    PROJECT_NAME: str = "Fitness Tracker API"
+    VERSION: str = "1.0.0"
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True
+    )
+
+
+settings = Settings()

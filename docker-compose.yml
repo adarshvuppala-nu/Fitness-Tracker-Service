@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: fitness_tracker_db
+    environment:
+      POSTGRES_USER: adarshvuppala
+      POSTGRES_PASSWORD: Helloworld+123
+      POSTGRES_DB: fitness_tracker
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adarshvuppala -d fitness_tracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: fitness_tracker_data
