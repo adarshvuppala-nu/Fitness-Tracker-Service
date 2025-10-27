@@ -4,13 +4,13 @@ A production-ready REST API service built with FastAPI for tracking workouts, fi
 
 ## Tech Stack
 
-- **Framework**: FastAPI 0.115.0
-- **Database**: PostgreSQL 16
-- **ORM**: SQLAlchemy 2.0.35
-- **Migrations**: Alembic 1.13.3
-- **Server**: Uvicorn 0.32.0
-- **Validation**: Pydantic 2.9.2
-- **Container**: Docker (PostgreSQL)
+- Framework: FastAPI 0.115.0
+- Database: PostgreSQL 16
+- ORM: SQLAlchemy 2.0.35
+- Migrations: Alembic 1.13.3
+- Server: Uvicorn 0.32.0
+- Validation: Pydantic 2.9.2
+- Container: Docker (PostgreSQL)
 
 ## Features
 
@@ -141,9 +141,9 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The API will be available at:
-- **API Base URL**: http://localhost:8000
-- **Interactive API Docs (Swagger UI)**: http://localhost:8000/docs
-- **Alternative API Docs (ReDoc)**: http://localhost:8000/redoc
+- API Base URL: http://localhost:8000
+- Interactive API Docs (Swagger UI): http://localhost:8000/docs
+- Alternative API Docs (ReDoc): http://localhost:8000/redoc
 
 ## Database Schema
 
@@ -194,10 +194,10 @@ All endpoints are prefixed with `/api/v1`
 
 This API follows professional REST API naming conventions:
 
-- **Users** (`/users`) - User account management
-- **Workout Sessions** (`/workout-sessions`) - Individual exercise sessions
-- **Fitness Goals** (`/fitness-goals`) - Personal fitness objectives and targets
-- **Progress Metrics** (`/progress-metrics`) - Body measurements and tracking data
+- Users (`/users`) - User account management
+- Workout Sessions (`/workout-sessions`) - Individual exercise sessions
+- Fitness Goals (`/fitness-goals`) - Personal fitness objectives and targets
+- Progress Metrics (`/progress-metrics`) - Body measurements and tracking data
 
 All endpoints use:
 - Plural nouns for resource names
@@ -396,6 +396,135 @@ curl "http://localhost:8000/api/v1/users/"
 3. Click "Try it out"
 4. Fill in the required parameters
 5. Click "Execute"
+
+## Running Tests
+
+This project includes comprehensive unit tests for all API endpoints and CRUD operations.
+
+### Prerequisites
+
+The test dependencies are already included in `requirements.txt`:
+- pytest
+- httpx (for FastAPI TestClient)
+
+### Run All Tests
+
+```bash
+# Run all tests with verbose output
+pytest -v
+
+# Run all tests with minimal output
+pytest
+```
+
+### Run Tests with Coverage
+
+```bash
+# Install coverage tool (if not already installed)
+pip install pytest-cov
+
+# Run tests with coverage report in terminal
+pytest --cov=app --cov-report=term-missing
+
+# Generate HTML coverage report
+pytest --cov=app --cov-report=html
+
+# Open the HTML report (macOS)
+open htmlcov/index.html
+
+# Open the HTML report (Linux)
+xdg-open htmlcov/index.html
+
+# Open the HTML report (Windows)
+start htmlcov/index.html
+```
+
+### Run Specific Test Files
+
+```bash
+# Test only user endpoints
+pytest tests/api/v1/test_users.py -v
+
+# Test only workout endpoints
+pytest tests/api/v1/test_workouts.py -v
+
+# Test only goal endpoints
+pytest tests/api/v1/test_goals.py -v
+
+# Test only progress endpoints
+pytest tests/api/v1/test_progress.py -v
+```
+
+### Run Specific Test Functions
+
+```bash
+# Run a specific test by name
+pytest tests/api/v1/test_users.py::test_create_user -v
+
+# Run tests matching a pattern
+pytest -k "create" -v
+
+# Run tests matching multiple patterns
+pytest -k "create or update" -v
+```
+
+### Test Output Options
+
+```bash
+# Show print statements and logs
+pytest -s
+
+# Stop after first failure
+pytest -x
+
+# Stop after N failures
+pytest --maxfail=2
+
+# Show local variables in tracebacks
+pytest -l
+
+# Run tests in parallel (requires pytest-xdist)
+pip install pytest-xdist
+pytest -n auto
+```
+
+### Test Structure
+
+```
+tests/
+├── __init__.py
+├── conftest.py              # Test fixtures and configuration
+└── api/
+    ├── __init__.py
+    └── v1/
+        ├── __init__.py
+        ├── test_users.py    # User endpoint tests (137 lines)
+        ├── test_workouts.py # Workout endpoint tests (203 lines)
+        ├── test_goals.py    # Goal endpoint tests (237 lines)
+        └── test_progress.py # Progress endpoint tests (238 lines)
+```
+
+### What's Tested
+
+- CRUD Operations: Create, Read, Update, Delete for all resources
+- Validation: Email format, required fields, data types
+- Error Handling: 400 for duplicates, 404 for not found, 422 for validation errors
+- Relationships: Foreign key validation (user must exist)
+- Pagination: skip and limit parameters
+- Filtering: By user_id, date ranges, status, metric types
+- Edge Cases: Empty lists, non-existent IDs, duplicate detection
+
+### Expected Test Results
+
+All tests should pass:
+```
+tests/api/v1/test_goals.py ............ (12 tests)
+tests/api/v1/test_progress.py ............ (12 tests)
+tests/api/v1/test_users.py ............ (9 tests)
+tests/api/v1/test_workouts.py ............ (10 tests)
+
+==================== 43 passed in 0.5s ====================
+```
 
 ## Docker Commands
 
