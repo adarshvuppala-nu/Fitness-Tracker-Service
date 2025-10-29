@@ -63,17 +63,22 @@ export const Dashboard = () => {
   const activeGoals = filteredGoals.filter((g) => g.status === 'active').length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Dashboard
-        </h2>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Dashboard
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Track your fitness journey and achievements
+          </p>
+        </div>
 
         {users.length > 0 && (
           <select
             value={selectedUser || ''}
             onChange={(e) => setSelectedUser(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-sm"
           >
             <option value="">All Users</option>
             {users.map((user) => (
@@ -107,9 +112,11 @@ export const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-primary-600 dark:text-primary-400" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+            <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg mr-3">
+              <Calendar className="w-5 h-5 text-white" />
+            </div>
             Recent Workouts
           </h3>
           {filteredWorkouts.length === 0 ? (
@@ -121,7 +128,7 @@ export const Dashboard = () => {
               {filteredWorkouts.slice(0, 5).map((workout) => (
                 <div
                   key={workout.id}
-                  className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl hover:shadow-md transition-all border border-gray-200 dark:border-gray-600"
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -147,9 +154,11 @@ export const Dashboard = () => {
           )}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <Target className="w-5 h-5 mr-2 text-primary-600 dark:text-primary-400" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+            <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mr-3">
+              <Target className="w-5 h-5 text-white" />
+            </div>
             Active Goals
           </h3>
           {filteredGoals.length === 0 ? (
@@ -167,7 +176,7 @@ export const Dashboard = () => {
                   return (
                     <div
                       key={goal.id}
-                      className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl hover:shadow-md transition-all border border-gray-200 dark:border-gray-600"
                     >
                       <div className="flex justify-between items-start mb-2">
                         <p className="font-medium text-gray-900 dark:text-white capitalize">
@@ -198,26 +207,36 @@ export const Dashboard = () => {
 };
 
 const StatCard = ({ icon: Icon, title, value, color }) => {
-  const colorClasses = {
-    blue: 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300',
-    green: 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300',
-    purple:
-      'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300',
+  const gradients = {
+    blue: 'from-blue-500 to-cyan-500',
+    green: 'from-green-500 to-emerald-500',
+    purple: 'from-purple-500 to-pink-500',
+  };
+
+  const glowColors = {
+    blue: 'shadow-blue-500/50',
+    green: 'shadow-green-500/50',
+    purple: 'shadow-purple-500/50',
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">
-            {value}
-          </p>
-        </div>
-        <div className={`p-3 rounded-full ${colorClasses[color]}`}>
-          <Icon className="w-8 h-8" />
+    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              {title}
+            </p>
+            <p className="text-4xl font-bold text-gray-900 dark:text-white mt-2 group-hover:scale-105 transition-transform">
+              {value}
+            </p>
+          </div>
+          <div className={`relative p-4 rounded-2xl bg-gradient-to-br ${gradients[color]} ${glowColors[color]} shadow-lg group-hover:scale-110 transition-transform`}>
+            <Icon className="w-8 h-8 text-white" />
+          </div>
         </div>
       </div>
+      <div className={`h-1.5 bg-gradient-to-r ${gradients[color]}`}></div>
     </div>
   );
 };

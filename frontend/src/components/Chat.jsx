@@ -1,7 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, Trash2, Bot, User } from 'lucide-react';
+import { Send, Loader2, Trash2, Bot, User, Sparkles, Target, TrendingUp } from 'lucide-react';
 import { useChat } from '../hooks/useChat';
 import toast from 'react-hot-toast';
+
+const QUICK_ACTIONS = [
+  {
+    icon: Target,
+    label: 'Create a workout plan',
+    message: 'Create a personalized workout plan for weight loss',
+  },
+  {
+    icon: TrendingUp,
+    label: 'Track my progress',
+    message: 'Show me my workout statistics and progress',
+  },
+  {
+    icon: Sparkles,
+    label: 'Nutrition advice',
+    message: 'Give me nutrition tips for muscle building',
+  },
+];
 
 export const Chat = () => {
   const [input, setInput] = useState('');
@@ -32,6 +50,15 @@ export const Chat = () => {
     }
   };
 
+  const handleQuickAction = async (message) => {
+    if (isLoading) return;
+    try {
+      await sendMessage(message);
+    } catch (err) {
+      console.error('Quick action error:', err);
+    }
+  };
+
   const handleClear = async () => {
     if (window.confirm('Clear chat history?')) {
       await clearChat();
@@ -59,14 +86,43 @@ export const Chat = () => {
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <Bot className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
-              Start a conversation with FitBot
+          <div className="flex flex-col items-center justify-center h-full text-center px-4">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-purple-500 rounded-full blur-2xl opacity-20 animate-pulse-slow"></div>
+              <Bot className="w-20 h-20 text-primary-600 dark:text-primary-400 relative" />
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Welcome to FitBot AI
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 max-w-md">
+              Your intelligent fitness companion. I can help you with workouts, nutrition, goal tracking, and personalized fitness advice.
             </p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
-              Ask about workouts, nutrition, goals, or analytics
-            </p>
+
+            <div className="w-full max-w-2xl space-y-3">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-semibold mb-3">
+                Quick Actions
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {QUICK_ACTIONS.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleQuickAction(action.message)}
+                    disabled={isLoading}
+                    className="group flex flex-col items-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 hover:from-primary-50 hover:to-primary-100 dark:hover:from-primary-900 dark:hover:to-primary-800 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200 hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <action.icon className="w-8 h-8 text-primary-600 dark:text-primary-400 mb-2 group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200 text-center">
+                      {action.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 text-xs text-gray-400 dark:text-gray-500">
+              Powered by OpenAI GPT-4o-mini with RAG
+            </div>
           </div>
         )}
 
