@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    # Database Configuration
     DATABASE_URL: str
     DATABASE_HOST: str = "localhost"
     DATABASE_PORT: int = 5433
@@ -9,9 +10,19 @@ class Settings(BaseSettings):
     DATABASE_USER: str = "adarshvuppala"
     DATABASE_PASSWORD: str
 
+    # API Configuration
     API_V1_PREFIX: str = "/api/v1"
     PROJECT_NAME: str = "Fitness Tracker API"
     VERSION: str = "1.0.0"
+
+    # Day 2: AI & LangChain Configuration
+    OPENAI_API_KEY: str
+    OPENWEATHER_API_KEY: str = ""
+
+    # Langfuse Observability
+    LANGFUSE_PUBLIC_KEY: str = ""
+    LANGFUSE_SECRET_KEY: str = ""
+    LANGFUSE_HOST: str = "https://cloud.langfuse.com"
 
     model_config = SettingsConfigDict(
         env_file=".env",
