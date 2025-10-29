@@ -177,4 +177,21 @@ export const deleteProgressMetric = async (progressId) => {
   await apiClient.delete(`/progress-metrics/${progressId}`);
 };
 
+export const getUserAnalytics = async (userId, days = 30) => {
+  const response = await apiClient.get(`/analytics/analytics/${userId}`, {
+    params: { days }
+  });
+  return response.data;
+};
+
+export const getWorkoutStreak = async (userId) => {
+  const response = await apiClient.get(`/analytics/streak/${userId}`);
+  return response.data;
+};
+
+export const exportUserData = async (userId) => {
+  const response = await apiClient.get(`/analytics/export/${userId}`);
+  return response.data;
+};
+
 export default apiClient;

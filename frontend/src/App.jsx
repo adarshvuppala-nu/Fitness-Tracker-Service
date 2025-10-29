@@ -3,8 +3,9 @@ import { Toaster } from 'react-hot-toast';
 import { Header } from './components/Header';
 import { Dashboard } from './components/Dashboard';
 import { Chat } from './components/Chat';
+import { Analytics } from './components/Analytics';
 import { AppProvider } from './contexts/AppContext';
-import { MessageSquare, LayoutDashboard } from 'lucide-react';
+import { MessageSquare, LayoutDashboard, BarChart3 } from 'lucide-react';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex space-x-8">
                 <NavLink to="/" icon={LayoutDashboard} label="Dashboard" />
+                <NavLink to="/analytics" icon={BarChart3} label="Analytics" />
                 <NavLink to="/chat" icon={MessageSquare} label="AI Chat" />
               </div>
             </div>
@@ -36,6 +38,7 @@ function App() {
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/analytics" element={<Analytics />} />
               <Route path="/chat" element={<Chat />} />
             </Routes>
           </main>
