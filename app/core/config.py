@@ -3,12 +3,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Database Configuration
-    DATABASE_URL: str
+    DATABASE_URL: str = "postgresql://fitness_user:password@localhost:5432/fitness_tracker"
     DATABASE_HOST: str = "localhost"
-    DATABASE_PORT: int = 5433
+    DATABASE_PORT: int = 5432
     DATABASE_NAME: str = "fitness_tracker"
-    DATABASE_USER: str = "adarshvuppala"
-    DATABASE_PASSWORD: str
+    DATABASE_USER: str = "fitness_user"
+    DATABASE_PASSWORD: str = "password"
 
     # API Configuration
     API_V1_PREFIX: str = "/api/v1"

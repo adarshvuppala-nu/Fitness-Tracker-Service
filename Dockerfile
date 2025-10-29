@@ -33,7 +33,9 @@ COPY . .
 RUN mkdir -p /app/app/static
 COPY --from=frontend-builder /frontend/dist /app/app/static/
 
-RUN useradd -m -u 1000 appuser && \
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh && \
+    useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
 USER appuser
@@ -43,4 +45,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
