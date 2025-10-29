@@ -1,0 +1,79 @@
+
+FROM node:20-slim AS frontend-builder
+
+WORKDIR /frontend
+
+# Copy package files and install dependencies
+COPY frontend/package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy frontend source and build
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Final Production Image
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive \
+    # PostgreSQL environment
+    POSTGRES_VERSION=15 \
+    PGDATA=/var/lib/postgresql/data \
+    # Application
+    APP_HOME=/app
+
+WORKDIR ${APP_HOME}
+
+# Install System Dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # PostgreSQL Server and Client
+    postgresql-${POSTGRES_VERSION} \
+    postgresql-client-${POSTGRES_VERSION} \
+    postgresql-contrib-${POSTGRES_VERSION} \
+    # Process supervisor
+    supervisor \
+    # Build dependencies for Python packages
+    gcc \
+    g++ \
+    libpq-dev \
+    # Utilities
+    curl \
+    # Cleanup
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Setup PostgreSQL
+# Create postgres user and data directory
+RUN mkdir -p ${PGDATA} && \
+    chown -R postgres:postgres /var/lib/postgresql && \
+    chmod 700 ${PGDATA}
+
+# Install Python Dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Copy built frontend from stage 1 to static directory
+RUN mkdir -p ${APP_HOME}/app/static
+COPY --from=frontend-builder /frontend/dist ${APP_HOME}/app/static/
+
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+RUN mkdir -p /var/log/supervisor /var/run/supervisor && \
+    chown -R postgres:postgres /var/lib/postgresql && \
+    chmod -R 755 /var/log/supervisor
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+
+EXPOSE 8000
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

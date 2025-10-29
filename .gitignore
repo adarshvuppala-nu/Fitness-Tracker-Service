@@ -58,3 +58,19 @@ htmlcov/
 
 # Vector store data
 data/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# Static files (built frontend)
+app/static/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Render
+.render-buildpacks.json

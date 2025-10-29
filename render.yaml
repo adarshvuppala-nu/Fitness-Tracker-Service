@@ -1,0 +1,87 @@
+services:
+  - type: web
+    name: fitness-tracker-app
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    branch: main
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fitness-tracker-db
+          property: connectionString
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: fitness-tracker-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: fitness-tracker-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: fitness-tracker-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: fitness-tracker-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: fitness-tracker-db
+          property: password
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: fitness-tracker-db
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: fitness-tracker-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: fitness-tracker-db
+          property: database
+      - key: DATABASE_USER
+        fromDatabase:
+          name: fitness-tracker-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: fitness-tracker-db
+          property: password
+      - key: API_V1_PREFIX
+        value: /api/v1
+      - key: PROJECT_NAME
+        value: Fitness Tracker API
+      - key: VERSION
+        value: 1.0.0
+      - key: DEBUG
+        value: false
+      - key: ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: LANGFUSE_HOST
+        value: https://cloud.langfuse.com
+
+databases:
+  - name: fitness-tracker-db
+    databaseName: fitness_tracker
+    user: fitness_user
+    plan: free
+    region: oregon

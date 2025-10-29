@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
 
     # Day 2: AI & LangChain Configuration
-    OPENAI_API_KEY: str
+    OPENAI_API_KEY: str = ""
     OPENWEATHER_API_KEY: str = ""
 
     # Langfuse Observability
