@@ -1,637 +1,290 @@
-# Fitness Tracker API
+# FitBot AI - Intelligent Fitness Tracker
 
-A production-ready REST API service built with FastAPI for tracking workouts, fitness progress, and health goals.
-
-## Tech Stack
-
-- Framework: FastAPI 0.115.0
-- Database: PostgreSQL 16
-- ORM: SQLAlchemy 2.0.35
-- Migrations: Alembic 1.13.3
-- Server: Uvicorn 0.32.0
-- Validation: Pydantic 2.9.2
-- Container: Docker (PostgreSQL)
+Production-ready full-stack fitness tracking application with AI-powered coaching, built with FastAPI, React, LangChain, and OpenAI.
 
 ## Features
 
-- Full CRUD operations for Users, Workout Sessions, Fitness Goals, and Progress Metrics
-- Professional, descriptive REST API endpoint naming
-- Comprehensive data validation with Pydantic
-- Database migrations with Alembic
+### Day 1: Core Backend
+- REST API with FastAPI for Users, Workouts, Goals, and Progress Metrics
+- PostgreSQL database with Alembic migrations
+- UUID-based primary keys and comprehensive validation
+- Full CRUD operations with filtering and pagination
 - Automatic API documentation (Swagger UI)
-- PostgreSQL with connection pooling
-- Production-ready RESTful API design
-- UUID-based primary keys
-- Timestamp tracking for all entities
-- Advanced filtering and pagination support
+
+### Day 2: AI Integration
+- **AI Chat Assistant**: Conversational fitness coach powered by GPT-4o-mini
+- **Custom Tools**: Calculator, Weather, Web Search, Fitness Data Query
+- **RAG Pipeline**: FAISS vector store with fitness knowledge base
+- **Langfuse Integration**: LLM observability and tracing
+- **React Frontend**: Responsive dashboard and real-time chat interface
+- **Dark/Light Theme**: Persistent theme switching with TailwindCSS
+
+## Tech Stack
+
+**Backend:**
+- FastAPI 0.115.0
+- PostgreSQL 16
+- SQLAlchemy 2.0.35
+- LangChain 0.3.0
+- OpenAI GPT-4o-mini
+- FAISS (vector store)
+- Langfuse (observability)
+
+**Frontend:**
+- React 19
+- Vite 7
+- TailwindCSS 3.4
+- React Router 6
+- Axios
+- Lucide Icons
 
 ## Prerequisites
 
 - Python 3.9+
-- Docker and Docker Compose
-- pip or uv package manager
+- Node.js 18+
+- Docker & Docker Compose
+- OpenAI API Key
+- (Optional) OpenWeatherMap API Key
+- (Optional) Langfuse Account
+
+## Quick Start
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/adarshvuppala-nu/Fitness-Tracker-Service.git
+cd Fitness-Tracker-Service
+```
+
+### 2. Backend Setup
+
+```bash
+# Start PostgreSQL
+docker-compose up -d
+
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables
+cp .env.example .env
+# Edit .env and add your OPENAI_API_KEY
+
+# Run database migrations
+alembic upgrade head
+
+# Start backend server
+uvicorn main:app --reload --port 8000
+```
+
+Backend API: http://localhost:8000
+API Docs: http://localhost:8000/docs
+
+### 3. Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+```
+
+Frontend App: http://localhost:3000
+
+## Environment Variables
+
+Create `.env` in the root directory:
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5433/fitness_tracker
+DATABASE_HOST=localhost
+DATABASE_PORT=5433
+DATABASE_NAME=fitness_tracker
+DATABASE_USER=your_user
+DATABASE_PASSWORD=your_password
+
+# API
+API_V1_PREFIX=/api/v1
+PROJECT_NAME=Fitness Tracker API
+VERSION=1.0.0
+
+# OpenAI
+OPENAI_API_KEY=sk-proj-...
+
+# OpenWeatherMap (Optional)
+OPENWEATHER_API_KEY=your_key_here
+
+# Langfuse (Optional - for LLM observability)
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_HOST=https://cloud.langfuse.com
+```
+
+## API Endpoints
+
+### Core CRUD
+- `POST /api/v1/users` - Create user
+- `GET /api/v1/users` - List users
+- `GET /api/v1/users/{id}` - Get user
+- `PUT /api/v1/users/{id}` - Update user
+- `DELETE /api/v1/users/{id}` - Delete user
+
+Similar patterns for:
+- `/api/v1/workout-sessions`
+- `/api/v1/fitness-goals`
+- `/api/v1/progress-metrics`
+
+### AI Assistant
+- `POST /api/v1/ai/chat` - Chat with AI agent
+- `GET /api/v1/ai/agent` - Agent info
+- `GET /api/v1/ai/tools` - Available tools
+- `GET /api/v1/ai/health` - Service health
+- `POST /api/v1/ai/clear-memory` - Clear chat history
+
+## Usage Examples
+
+### Chat with AI
+
+```bash
+curl -X POST http://localhost:8000/api/v1/ai/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Create a weight loss plan for me",
+    "use_memory": true,
+    "use_rag": true
+  }'
+```
+
+### Create Workout
+
+```bash
+curl -X POST http://localhost:8000/api/v1/workout-sessions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "uuid-here",
+    "type": "running",
+    "duration": 30,
+    "calories_burned": 300,
+    "date": "2024-10-28"
+  }'
+```
+
+## Development
+
+### Run Tests
+
+```bash
+# Backend tests
+pytest tests/ -v
+
+# Frontend tests (if configured)
+cd frontend && npm test
+```
+
+### Database Migrations
+
+```bash
+# Create new migration
+alembic revision --autogenerate -m "description"
+
+# Apply migrations
+alembic upgrade head
+
+# Rollback
+alembic downgrade -1
+```
 
 ## Project Structure
 
 ```
 fitness-tracker-api/
-├── main.py                          # Application entrypoint
-├── .env.example                     # Environment variables template
-├── .env                             # Environment variables (git-ignored)
-├── .gitignore                       # Git ignore rules
-├── README.md                        # This file
-├── requirements.txt                 # Python dependencies
-├── docker-compose.yml               # PostgreSQL container config
-├── alembic.ini                      # Alembic configuration
-├── alembic/
-│   ├── env.py                       # Alembic environment
-│   └── versions/                    # Migration files
-└── app/
-    ├── core/
-    │   ├── config.py                # Application configuration
-    │   └── database.py              # Database session management
-    ├── models/
-    │   ├── user.py                  # User model
-    │   ├── workout.py               # Workout model
-    │   ├── goal.py                  # Goal model
-    │   └── progress.py              # Progress model
-    ├── schemas/
-    │   ├── user.py                  # User Pydantic schemas
-    │   ├── workout.py               # Workout Pydantic schemas
-    │   ├── goal.py                  # Goal Pydantic schemas
-    │   └── progress.py              # Progress Pydantic schemas
-    ├── crud/
-    │   ├── base.py                  # Base CRUD operations
-    │   ├── user.py                  # User CRUD
-    │   ├── workout.py               # Workout CRUD
-    │   ├── goal.py                  # Goal CRUD
-    │   └── progress.py              # Progress CRUD
-    └── api/
-        ├── deps.py                  # API dependencies
-        └── v1/
-            ├── router.py            # Main API router
-            ├── users.py             # User endpoints (/users)
-            ├── workouts.py          # Workout session endpoints (/workout-sessions)
-            ├── goals.py             # Fitness goal endpoints (/fitness-goals)
-            └── progress.py          # Progress metric endpoints (/progress-metrics)
+├── main.py                 # FastAPI app entry point
+├── requirements.txt        # Python dependencies
+├── .env                    # Environment variables
+├── docker-compose.yml      # PostgreSQL container
+├── alembic/                # Database migrations
+├── app/
+│   ├── core/               # Config & database
+│   ├── models/             # SQLAlchemy models
+│   ├── schemas/            # Pydantic schemas
+│   ├── crud/               # CRUD operations
+│   ├── api/v1/             # API endpoints
+│   ├── tools.py            # LangChain custom tools
+│   ├── rag.py              # RAG pipeline & FAISS
+│   └── agent.py            # AI agent with memory
+├── tests/                  # Pytest test suite
+└── frontend/
+    ├── src/
+    │   ├── components/     # React components
+    │   ├── hooks/          # Custom hooks
+    │   ├── contexts/       # React context
+    │   └── services/       # API client
+    ├── package.json
+    └── vite.config.js
 ```
 
-## Setup Instructions
+## Deployment
 
-### 1. Clone or Navigate to Project Directory
-
-```bash
-cd fitness-tracker-api
-```
-
-### 2. Create Virtual Environment
+### Backend
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
+# Build production
 pip install -r requirements.txt
+
+# Run with gunicorn
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
 ```
 
-### 4. Set Up Environment Variables
-
-```bash
-cp .env.example .env
-```
-
-The `.env` file contains:
-```
-DATABASE_URL=postgresql://adarshvuppala:Helloworld+123@localhost:5433/fitness_tracker
-DATABASE_HOST=localhost
-DATABASE_PORT=5433
-DATABASE_NAME=fitness_tracker
-DATABASE_USER=adarshvuppala
-DATABASE_PASSWORD=Helloworld+123
-
-API_V1_PREFIX=/api/v1
-PROJECT_NAME=Fitness Tracker API
-VERSION=1.0.0
-```
-
-### 5. Start PostgreSQL with Docker
+### Frontend
 
 ```bash
-docker-compose up -d
+cd frontend
+npm run build
+# Deploy dist/ folder to hosting (Vercel, Netlify, etc.)
 ```
 
-Verify the container is running:
-```bash
-docker ps
-```
-
-### 6. Run Database Migrations
-
-```bash
-alembic upgrade head
-```
-
-### 7. Start the API Server
-
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-The API will be available at:
-- API Base URL: http://localhost:8000
-- Interactive API Docs (Swagger UI): http://localhost:8000/docs
-- Alternative API Docs (ReDoc): http://localhost:8000/redoc
-
-## Database Schema
-
-### Users Table
-- `id`: UUID (primary key)
-- `username`: String (unique, indexed)
-- `email`: String (unique, indexed)
-- `created_at`: DateTime
-- `updated_at`: DateTime
-
-### Workouts Table
-- `id`: UUID (primary key)
-- `user_id`: UUID (foreign key → users.id)
-- `type`: String (e.g., "running", "cycling")
-- `duration`: Integer (minutes)
-- `calories_burned`: Float
-- `notes`: Text (optional)
-- `date`: Date
-- `created_at`: DateTime
-
-### Goals Table
-- `id`: UUID (primary key)
-- `user_id`: UUID (foreign key → users.id)
-- `goal_type`: String (e.g., "weight_loss")
-- `target_value`: Float
-- `current_value`: Float (default: 0.0)
-- `unit`: String (e.g., "kg", "lbs")
-- `deadline`: Date
-- `status`: String (default: "active")
-- `created_at`: DateTime
-- `updated_at`: DateTime
-
-### Progress Table
-- `id`: UUID (primary key)
-- `user_id`: UUID (foreign key → users.id)
-- `metric`: String (e.g., "weight")
-- `value`: Float
-- `unit`: String
-- `date`: Date
-- `notes`: Text (optional)
-- `created_at`: DateTime
-
-## API Endpoints
-
-All endpoints are prefixed with `/api/v1`
-
-### Endpoint Naming Convention
-
-This API follows professional REST API naming conventions:
-
-- Users (`/users`) - User account management
-- Workout Sessions (`/workout-sessions`) - Individual exercise sessions
-- Fitness Goals (`/fitness-goals`) - Personal fitness objectives and targets
-- Progress Metrics (`/progress-metrics`) - Body measurements and tracking data
-
-All endpoints use:
-- Plural nouns for resource names
-- Kebab-case for multi-word resources
-- Descriptive names for clarity
-- RESTful HTTP methods (GET, POST, PUT, DELETE)
-
-### Users
-
-#### Create User
-```
-POST /api/v1/users/
-Content-Type: application/json
-
-{
-  "username": "johndoe",
-  "email": "john@example.com"
-}
-```
-
-#### Get User by ID
-```
-GET /api/v1/users/{user_id}
-```
-
-#### List Users
-```
-GET /api/v1/users/?skip=0&limit=10
-```
-
-#### Update User
-```
-PUT /api/v1/users/{user_id}
-Content-Type: application/json
-
-{
-  "username": "newusername",
-  "email": "newemail@example.com"
-}
-```
-
-#### Delete User
-```
-DELETE /api/v1/users/{user_id}
-```
-
-### Workout Sessions
-
-#### Create Workout Session
-```
-POST /api/v1/workout-sessions/
-Content-Type: application/json
-
-{
-  "user_id": "uuid-here",
-  "type": "running",
-  "duration": 30,
-  "calories_burned": 250,
-  "date": "2025-10-27",
-  "notes": "Morning run"
-}
-```
-
-#### Get Workout Session by ID
-```
-GET /api/v1/workout-sessions/{workout_id}
-```
-
-#### List Workout Sessions
-```
-GET /api/v1/workout-sessions/?user_id=uuid&date_from=2025-10-01&date_to=2025-10-31&skip=0&limit=10
-```
-
-#### Update Workout Session
-```
-PUT /api/v1/workout-sessions/{workout_id}
-Content-Type: application/json
-
-{
-  "duration": 45,
-  "calories_burned": 300
-}
-```
-
-#### Delete Workout Session
-```
-DELETE /api/v1/workout-sessions/{workout_id}
-```
-
-### Fitness Goals
-
-#### Create Fitness Goal
-```
-POST /api/v1/fitness-goals/
-Content-Type: application/json
-
-{
-  "user_id": "uuid-here",
-  "goal_type": "weight_loss",
-  "target_value": 75.0,
-  "current_value": 85.0,
-  "unit": "kg",
-  "deadline": "2025-12-31"
-}
-```
-
-#### Get Fitness Goal by ID
-```
-GET /api/v1/fitness-goals/{goal_id}
-```
-
-#### List Fitness Goals
-```
-GET /api/v1/fitness-goals/?user_id=uuid&status=active&skip=0&limit=10
-```
-
-#### Update Fitness Goal
-```
-PUT /api/v1/fitness-goals/{goal_id}
-Content-Type: application/json
-
-{
-  "current_value": 80.0,
-  "status": "active"
-}
-```
-
-#### Delete Fitness Goal
-```
-DELETE /api/v1/fitness-goals/{goal_id}
-```
-
-### Progress Metrics
-
-#### Create Progress Metric
-```
-POST /api/v1/progress-metrics/
-Content-Type: application/json
-
-{
-  "user_id": "uuid-here",
-  "metric": "weight",
-  "value": 82.5,
-  "unit": "kg",
-  "date": "2025-10-27",
-  "notes": "Weekly weigh-in"
-}
-```
-
-#### Get Progress Metric by ID
-```
-GET /api/v1/progress-metrics/{progress_id}
-```
-
-#### List Progress Metrics
-```
-GET /api/v1/progress-metrics/?user_id=uuid&metric=weight&date_from=2025-10-01&date_to=2025-10-31&skip=0&limit=10
-```
-
-#### Update Progress Metric
-```
-PUT /api/v1/progress-metrics/{progress_id}
-Content-Type: application/json
-
-{
-  "value": 82.0,
-  "notes": "Updated measurement"
-}
-```
-
-#### Delete Progress Metric
-```
-DELETE /api/v1/progress-metrics/{progress_id}
-```
-
-## Testing the API
-
-### Using cURL
-
-Create a user:
-```bash
-curl -X POST "http://localhost:8000/api/v1/users/" \
-  -H "Content-Type: application/json" \
-  -d '{"username": "testuser", "email": "test@example.com"}'
-```
-
-List all users:
-```bash
-curl "http://localhost:8000/api/v1/users/"
-```
-
-### Using Swagger UI
-
-1. Navigate to http://localhost:8000/docs
-2. Click on any endpoint to expand it
-3. Click "Try it out"
-4. Fill in the required parameters
-5. Click "Execute"
-
-## Running Tests
-
-This project includes comprehensive unit tests for all API endpoints and CRUD operations.
-
-### Prerequisites
-
-The test dependencies are already included in `requirements.txt`:
-- pytest
-- httpx (for FastAPI TestClient)
-
-### Run All Tests
-
-```bash
-# Run all tests with verbose output
-pytest -v
-
-# Run all tests with minimal output
-pytest
-```
-
-### Run Tests with Coverage
-
-```bash
-# Install coverage tool (if not already installed)
-pip install pytest-cov
-
-# Run tests with coverage report in terminal
-pytest --cov=app --cov-report=term-missing
-
-# Generate HTML coverage report
-pytest --cov=app --cov-report=html
-
-# Open the HTML report (macOS)
-open htmlcov/index.html
-
-# Open the HTML report (Linux)
-xdg-open htmlcov/index.html
-
-# Open the HTML report (Windows)
-start htmlcov/index.html
-```
-
-### Run Specific Test Files
-
-```bash
-# Test only user endpoints
-pytest tests/api/v1/test_users.py -v
-
-# Test only workout endpoints
-pytest tests/api/v1/test_workouts.py -v
-
-# Test only goal endpoints
-pytest tests/api/v1/test_goals.py -v
-
-# Test only progress endpoints
-pytest tests/api/v1/test_progress.py -v
-```
-
-### Run Specific Test Functions
-
-```bash
-# Run a specific test by name
-pytest tests/api/v1/test_users.py::test_create_user -v
-
-# Run tests matching a pattern
-pytest -k "create" -v
-
-# Run tests matching multiple patterns
-pytest -k "create or update" -v
-```
-
-### Test Output Options
-
-```bash
-# Show print statements and logs
-pytest -s
+## AI Agent Capabilities
 
-# Stop after first failure
-pytest -x
+The FitBot AI assistant can:
 
-# Stop after N failures
-pytest --maxfail=2
+1. **Query Fitness Data**: Retrieve workouts, goals, and progress metrics
+2. **Calculate Metrics**: BMI, TDEE, macro splits, calorie needs
+3. **Check Weather**: For outdoor workout planning
+4. **Search Web**: Latest fitness research and equipment info
+5. **Provide Coaching**: Evidence-based fitness and nutrition advice
+6. **Context Aware**: RAG-augmented responses with fitness knowledge base
 
-# Show local variables in tracebacks
-pytest -l
+## Observability
 
-# Run tests in parallel (requires pytest-xdist)
-pip install pytest-xdist
-pytest -n auto
-```
-
-### Test Structure
-
-```
-tests/
-├── __init__.py
-├── conftest.py              # Test fixtures and configuration
-└── api/
-    ├── __init__.py
-    └── v1/
-        ├── __init__.py
-        ├── test_users.py    # User endpoint tests (137 lines)
-        ├── test_workouts.py # Workout endpoint tests (203 lines)
-        ├── test_goals.py    # Goal endpoint tests (237 lines)
-        └── test_progress.py # Progress endpoint tests (238 lines)
-```
-
-### What's Tested
-
-- CRUD Operations: Create, Read, Update, Delete for all resources
-- Validation: Email format, required fields, data types
-- Error Handling: 400 for duplicates, 404 for not found, 422 for validation errors
-- Relationships: Foreign key validation (user must exist)
-- Pagination: skip and limit parameters
-- Filtering: By user_id, date ranges, status, metric types
-- Edge Cases: Empty lists, non-existent IDs, duplicate detection
-
-### Expected Test Results
-
-All tests should pass:
-```
-tests/api/v1/test_goals.py ............ (12 tests)
-tests/api/v1/test_progress.py ............ (12 tests)
-tests/api/v1/test_users.py ............ (9 tests)
-tests/api/v1/test_workouts.py ............ (10 tests)
-
-==================== 43 passed in 0.5s ====================
-```
-
-## Docker Commands
-
-### Start PostgreSQL
-```bash
-docker-compose up -d
-```
-
-### Check Container Status
-```bash
-docker-compose ps
-```
-
-### View Logs
-```bash
-docker-compose logs postgres
-```
-
-### Stop PostgreSQL
-```bash
-docker-compose down
-```
+If Langfuse is configured, all LLM interactions are traced:
 
-### Stop and Remove Data Volume
-```bash
-docker-compose down -v
-```
-
-## Alembic Commands
-
-### Create New Migration
-```bash
-alembic revision --autogenerate -m "Description of changes"
-```
-
-### Apply Migrations
-```bash
-alembic upgrade head
-```
-
-### Rollback Migration
-```bash
-alembic downgrade -1
-```
-
-### View Migration History
-```bash
-alembic history
-```
-
-## Development Notes
+- Prompt/completion pairs
+- Tool usage
+- RAG retrievals
+- Response times
+- Token usage
 
-### Adding New Models
-
-1. Create model in `app/models/`
-2. Create schemas in `app/schemas/`
-3. Create CRUD operations in `app/crud/`
-4. Create API endpoints in `app/api/v1/`
-5. Include router in `app/api/v1/router.py`
-6. Generate migration: `alembic revision --autogenerate -m "Add new model"`
-7. Apply migration: `alembic upgrade head`
-
-### Connection Pooling
-
-The database is configured with:
-- Pool size: 10 connections
-- Max overflow: 20 connections
-- Pre-ping enabled for connection health checks
-
-## Troubleshooting
-
-### Port 5432 Already in Use
-
-If you see "port 5432 already in use", PostgreSQL is already running on your system. The Docker container is configured to use port 5433 instead.
-
-### Database Connection Errors
-
-1. Verify PostgreSQL container is running: `docker ps`
-2. Check container logs: `docker-compose logs postgres`
-3. Verify environment variables in `.env`
-4. Test connection: `docker exec -it fitness_tracker_db psql -U adarshvuppala -d fitness_tracker`
-
-### Import Errors
-
-Make sure you're in the project root directory and the virtual environment is activated:
-```bash
-source .venv/bin/activate  # Linux/Mac
-.venv\Scripts\activate     # Windows
-```
+View traces at: https://cloud.langfuse.com
 
-## Production Deployment Checklist
+## Contributing
 
-- [ ] Change database credentials
-- [ ] Enable HTTPS
-- [ ] Configure CORS for specific origins
-- [ ] Set up authentication/authorization
-- [ ] Enable rate limiting
-- [ ] Configure logging
-- [ ] Set up monitoring
-- [ ] Use production WSGI server (Gunicorn with Uvicorn workers)
-- [ ] Set up database backups
-- [ ] Configure environment-specific settings
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
 
 ## License
 
-This project is for educational purposes.
+MIT License
 
-## Contributors
+## Support
 
-Built with FastAPI and PostgreSQL.
+Issues: https://github.com/adarshvuppala-nu/Fitness-Tracker-Service/issues
