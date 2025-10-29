@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1 import users, workouts, goals, progress, ai
+from app.api.v1 import users, workouts, goals, progress, ai, analytics
 
 api_router = APIRouter()
 
@@ -12,3 +12,4 @@ api_router.include_router(progress.router, prefix="/progress-metrics", tags=["Pr
 
 # Day 2: AI Agent endpoints
 api_router.include_router(ai.router, prefix="/ai", tags=["AI Assistant"])
+api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])

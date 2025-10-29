@@ -55,3 +55,6 @@ htmlcov/
 
 # Logs
 *.log
+
+# Vector store data
+data/
