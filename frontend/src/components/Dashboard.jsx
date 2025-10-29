@@ -3,6 +3,7 @@ import { Activity, Target, TrendingUp, Calendar } from 'lucide-react';
 import { getUsers, getWorkouts, getGoals } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAppContext } from '../contexts/AppContext';
+import { BMICalculator } from './BMICalculator';
 
 export const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -201,6 +202,8 @@ export const Dashboard = () => {
             </div>
           )}
         </div>
+
+        <BMICalculator />
       </div>
     </div>
   );
