@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, Trash2, Bot, User, Sparkles, Target, TrendingUp } from 'lucide-react';
+import { Send, Loader2, Trash2, Bot, User, Sparkles, Target, TrendingUp, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useChat } from '../hooks/useChat';
 import toast from 'react-hot-toast';
 
@@ -23,6 +23,7 @@ const QUICK_ACTIONS = [
 
 export const Chat = () => {
   const [input, setInput] = useState('');
+  const [feedback, setFeedback] = useState({});
   const { messages, isLoading, error, sendMessage, clearChat } = useChat();
   const messagesEndRef = useRef(null);
 
@@ -64,6 +65,14 @@ export const Chat = () => {
       await clearChat();
       toast.success('Chat cleared');
     }
+  };
+
+  const handleFeedback = (messageId, type) => {
+    setFeedback((prev) => ({
+      ...prev,
+      [messageId]: type,
+    }));
+    toast.success(`Feedback recorded: ${type === 'positive' ? 'Helpful' : 'Not helpful'}`);
   };
 
   return (
@@ -152,20 +161,49 @@ export const Chat = () => {
                 )}
               </div>
 
-              <div
-                className={`p-3 rounded-lg ${
-                  msg.role === 'user'
-                    ? 'bg-primary-600 text-white dark:bg-primary-500'
-                    : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
-                }`}
-              >
-                <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+              <div className="flex flex-col">
+                <div
+                  className={`p-3 rounded-lg ${
+                    msg.role === 'user'
+                      ? 'bg-primary-600 text-white dark:bg-primary-500'
+                      : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
 
-                {msg.tools_used && msg.tools_used.length > 0 && (
-                  <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
-                    <p className="text-xs opacity-75">
-                      Tools: {msg.tools_used.map((t) => t.tool).join(', ')}
-                    </p>
+                  {msg.tools_used && msg.tools_used.length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
+                      <p className="text-xs opacity-75">
+                        Tools: {msg.tools_used.map((t) => t.tool).join(', ')}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {msg.role === 'assistant' && (
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      onClick={() => handleFeedback(msg.id, 'positive')}
+                      className={`p-1.5 rounded-lg transition-colors ${
+                        feedback[msg.id] === 'positive'
+                          ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-green-50 dark:hover:bg-green-900/50'
+                      }`}
+                      title="Helpful"
+                    >
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleFeedback(msg.id, 'negative')}
+                      className={`p-1.5 rounded-lg transition-colors ${
+                        feedback[msg.id] === 'negative'
+                          ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/50'
+                      }`}
+                      title="Not helpful"
+                    >
+                      <ThumbsDown className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 )}
               </div>
