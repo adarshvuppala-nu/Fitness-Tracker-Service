@@ -1,12 +1,4 @@
-"""
-RAG (Retrieval-Augmented Generation) Pipeline with FAISS
-
-This module implements a production-ready RAG system that:
-1. Creates embeddings from fitness knowledge base documents
-2. Stores vectors in FAISS for efficient similarity search
-3. Retrieves relevant context to augment LLM responses
-4. Reduces hallucinations by grounding responses in real data
-"""
+"""RAG Pipeline with FAISS for Fitness Knowledge Base"""
 
 import os
 from typing import List, Dict, Optional
@@ -22,10 +14,6 @@ from langchain_openai import ChatOpenAI
 
 from app.core.config import settings
 
-
-# ============================================================================
-# Fitness Knowledge Base Content
-# ============================================================================
 
 FITNESS_KNOWLEDGE_BASE = """
 # Comprehensive Fitness & Wellness Knowledge Base
@@ -254,11 +242,6 @@ Focus on: Core stability, pelvic floor exercises, moderate cardio
 Postpartum: Gradual return to exercise after medical clearance
 """
 
-# ============================================================================
-# RAG Pipeline Implementation
-# ============================================================================
-
-
 class FitnessRAG:
     """
     Retrieval-Augmented Generation system for fitness knowledge.
@@ -411,11 +394,6 @@ class FitnessRAG:
         )
 
 
-# ============================================================================
-# Global RAG Instance
-# ============================================================================
-
-# Singleton instance for the application
 _rag_instance: Optional[FitnessRAG] = None
 
 

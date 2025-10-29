@@ -1,13 +1,4 @@
-"""
-Custom LangChain Tools for Fitness Tracker AI Agent
-
-This module provides production-ready tools for the AI agent:
-1. CalculatorTool: Safe mathematical expression evaluation
-2. WeatherTool: Real-time weather data for workout planning
-3. FileManagerTool: CSV file processing for bulk data import
-4. WebSearchTool: Web search for fitness/nutrition information
-5. FitnessTrackerTool: Interact with fitness data via CRUD operations
-"""
+"""Custom LangChain Tools for Fitness Tracker AI Agent"""
 
 from typing import Optional, Type, Dict, Any, List
 from datetime import datetime, date
@@ -26,11 +17,6 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import SessionLocal
 from app import crud, schemas
-
-
-# ============================================================================
-# Tool Input Schemas (Pydantic models for validation)
-# ============================================================================
 
 
 class CalculatorInput(BaseModel):
@@ -54,11 +40,6 @@ class FitnessQueryInput(BaseModel):
     action: str = Field(description="Action to perform: 'get_user', 'list_workouts', 'get_stats', 'list_goals', 'get_progress'")
     user_id: Optional[str] = Field(default=None, description="User UUID (required for most actions)")
     filters: Optional[Dict[str, Any]] = Field(default=None, description="Optional filters (e.g., {'date_from': '2024-01-01'})")
-
-
-# ============================================================================
-# Custom Tools Implementation
-# ============================================================================
 
 
 class CalculatorTool(BaseTool):
@@ -424,10 +405,6 @@ Workout Types:
         """Execute the fitness tracker tool asynchronously"""
         return self._run(action, user_id, filters)
 
-
-# ============================================================================
-# Tool Registry
-# ============================================================================
 
 def get_all_tools() -> List[BaseTool]:
     """

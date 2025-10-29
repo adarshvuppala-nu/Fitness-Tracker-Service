@@ -1,13 +1,4 @@
-"""
-LangChain AI Agent with Memory and Tool Integration
-
-This module implements a production-ready AI agent that:
-1. Uses OpenAI GPT-4o-mini for cost-efficient, fast responses
-2. Maintains conversation memory across interactions
-3. Integrates custom tools (Calculator, Weather, WebSearch, FitnessTracker)
-4. Augments responses with RAG-retrieved fitness knowledge
-5. Provides Langfuse observability for debugging and optimization
-"""
+"""LangChain AI Agent with Memory and Tool Integration"""
 
 from typing import List, Dict, Any, Optional
 import json
@@ -23,10 +14,6 @@ from app.core.config import settings
 from app.tools import get_all_tools, get_tools_info
 from app.rag import get_rag, augment_prompt_with_context
 
-
-# ============================================================================
-# Langfuse Integration (Optional - only if keys are configured)
-# ============================================================================
 
 def get_langfuse_handler():
     """
@@ -51,10 +38,6 @@ def get_langfuse_handler():
 
     return None
 
-
-# ============================================================================
-# Custom Callback for Debugging (Fallback if Langfuse not configured)
-# ============================================================================
 
 class DebugCallbackHandler(BaseCallbackHandler):
     """
@@ -89,10 +72,6 @@ class DebugCallbackHandler(BaseCallbackHandler):
         """Called when agent finishes"""
         print(f"\n[AGENT FINISH] Final output ready")
 
-
-# ============================================================================
-# Agent System Prompt
-# ============================================================================
 
 AGENT_SYSTEM_PROMPT = """You are FitBot, an intelligent fitness and wellness assistant with access to powerful tools and a comprehensive knowledge base.
 
@@ -150,10 +129,6 @@ Great consistency! You're averaging 3 workouts per week. To optimize results, co
 Remember: You are here to help users achieve their fitness goals through evidence-based, personalized guidance. Be their supportive coach and data-driven analyst!
 """
 
-
-# ============================================================================
-# Agent Factory
-# ============================================================================
 
 class FitnessAgent:
     """
@@ -315,10 +290,6 @@ class FitnessAgent:
 
         return messages
 
-
-# ============================================================================
-# Global Agent Instance (Singleton)
-# ============================================================================
 
 _agent_instance: Optional[FitnessAgent] = None
 

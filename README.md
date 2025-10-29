@@ -1,23 +1,23 @@
-# FitBot AI - Intelligent Fitness Tracker
+# Fitness Tracker API
 
 Production-ready full-stack fitness tracking application with AI-powered coaching, built with FastAPI, React, LangChain, and OpenAI.
 
 ## Features
 
-### Day 1: Core Backend
+### Core Backend
 - REST API with FastAPI for Users, Workouts, Goals, and Progress Metrics
 - PostgreSQL database with Alembic migrations
 - UUID-based primary keys and comprehensive validation
 - Full CRUD operations with filtering and pagination
 - Automatic API documentation (Swagger UI)
 
-### Day 2: AI Integration
-- **AI Chat Assistant**: Conversational fitness coach powered by GPT-4o-mini
-- **Custom Tools**: Calculator, Weather, Web Search, Fitness Data Query
-- **RAG Pipeline**: FAISS vector store with fitness knowledge base
-- **Langfuse Integration**: LLM observability and tracing
-- **React Frontend**: Responsive dashboard and real-time chat interface
-- **Dark/Light Theme**: Persistent theme switching with TailwindCSS
+### AI Integration
+- AI Chat Assistant: Conversational fitness coach powered by GPT-4o-mini
+- Custom Tools: Calculator, Weather, Web Search, Fitness Data Query
+- RAG Pipeline: FAISS vector store with fitness knowledge base
+- Langfuse Integration: LLM observability and tracing
+- React Frontend: Responsive dashboard and real-time chat interface
+- Dark/Light Theme: Persistent theme switching with TailwindCSS
 
 ## Tech Stack
 
@@ -252,14 +252,12 @@ npm run build
 
 ## AI Agent Capabilities
 
-The FitBot AI assistant can:
-
-1. **Query Fitness Data**: Retrieve workouts, goals, and progress metrics
-2. **Calculate Metrics**: BMI, TDEE, macro splits, calorie needs
-3. **Check Weather**: For outdoor workout planning
-4. **Search Web**: Latest fitness research and equipment info
-5. **Provide Coaching**: Evidence-based fitness and nutrition advice
-6. **Context Aware**: RAG-augmented responses with fitness knowledge base
+1. Query Fitness Data: Retrieve workouts, goals, and progress metrics
+2. Calculate Metrics: BMI, TDEE, macro splits, calorie needs
+3. Check Weather: For outdoor workout planning
+4. Search Web: Latest fitness research and equipment info
+5. Provide Coaching: Evidence-based fitness and nutrition advice
+6. Context Aware: RAG-augmented responses with fitness knowledge base
 
 ## Observability
 

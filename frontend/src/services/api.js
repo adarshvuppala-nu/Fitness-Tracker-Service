@@ -1,59 +1,39 @@
-/**
- * API Service Layer
- *
- * Centralized axios-based API client for all backend communication.
- * Handles authentication, error handling, and request/response formatting.
- */
-
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
-// Create axios instance with default config
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 30000, // 30 seconds
+  timeout: 30000,
 });
 
-// Request interceptor (can add auth tokens here)
 apiClient.interceptors.request.use(
   (config) => {
-    // Add authentication token if available
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Server responded with error status
       console.error('API Error:', error.response.data);
     } else if (error.request) {
-      // Request made but no response received
       console.error('Network Error:', error.message);
     } else {
-      // Something else happened
       console.error('Error:', error.message);
     }
     return Promise.reject(error);
   }
 );
-
-// ============================================================================
-// AI Agent Endpoints
-// ============================================================================
 
 export const chatWithAgent = async (message, options = {}) => {
   const { use_memory = true, use_rag = true } = options;
@@ -87,10 +67,6 @@ export const clearMemory = async () => {
   return response.data;
 };
 
-// ============================================================================
-// User Endpoints
-// ============================================================================
-
 export const getUsers = async (skip = 0, limit = 100) => {
   const response = await apiClient.get('/users', {
     params: { skip, limit }
@@ -116,10 +92,6 @@ export const updateUser = async (userId, userData) => {
 export const deleteUser = async (userId) => {
   await apiClient.delete(`/users/${userId}`);
 };
-
-// ============================================================================
-// Workout Endpoints
-// ============================================================================
 
 export const getWorkouts = async (filters = {}) => {
   const { user_id, date_from, date_to, skip = 0, limit = 100 } = filters;
@@ -149,10 +121,6 @@ export const deleteWorkout = async (workoutId) => {
   await apiClient.delete(`/workout-sessions/${workoutId}`);
 };
 
-// ============================================================================
-// Goal Endpoints
-// ============================================================================
-
 export const getGoals = async (filters = {}) => {
   const { user_id, status, skip = 0, limit = 100 } = filters;
 
@@ -180,10 +148,6 @@ export const updateGoal = async (goalId, goalData) => {
 export const deleteGoal = async (goalId) => {
   await apiClient.delete(`/fitness-goals/${goalId}`);
 };
-
-// ============================================================================
-// Progress Endpoints
-// ============================================================================
 
 export const getProgressMetrics = async (filters = {}) => {
   const { user_id, metric, date_from, date_to, skip = 0, limit = 100 } = filters;

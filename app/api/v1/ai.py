@@ -1,13 +1,4 @@
-"""
-AI Agent API Endpoints
-
-This module provides REST API endpoints for AI agent interactions:
-- POST /chat: Chat with the AI fitness assistant
-- GET /health: Health check for AI services
-- GET /tools: List available AI tools
-- GET /agent: Get agent information and capabilities
-- POST /clear-memory: Clear conversation memory
-"""
+"""AI Agent API Endpoints"""
 
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Body
@@ -19,10 +10,6 @@ import asyncio
 from app.agent import get_agent, get_agent_info
 from app.tools import get_tools_info
 
-
-# ============================================================================
-# Request/Response Schemas
-# ============================================================================
 
 class ChatRequest(BaseModel):
     """Request schema for chat endpoint"""
@@ -72,16 +59,8 @@ class HealthResponse(BaseModel):
     services: dict = Field(..., description="Status of individual services")
 
 
-# ============================================================================
-# Router Configuration
-# ============================================================================
-
 router = APIRouter()
 
-
-# ============================================================================
-# API Endpoints
-# ============================================================================
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(
