@@ -113,7 +113,7 @@ export const Chat = () => {
                 Quick Actions
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {QUICK_ACTIONS.map((action, index) => (
+                {Array.isArray(QUICK_ACTIONS) && QUICK_ACTIONS.map((action, index) => (
                   <button
                     key={index}
                     onClick={() => handleQuickAction(action.message)}
@@ -135,7 +135,7 @@ export const Chat = () => {
           </div>
         )}
 
-        {messages.map((msg) => (
+        {Array.isArray(messages) && messages.map((msg) => (
           <div
             key={msg.id}
             className={`flex ${
@@ -171,10 +171,10 @@ export const Chat = () => {
                 >
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
 
-                  {msg.tools_used && msg.tools_used.length > 0 && (
+                  {msg.tools_used && Array.isArray(msg.tools_used) && msg.tools_used.length > 0 && (
                     <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
                       <p className="text-xs opacity-75">
-                        Tools: {msg.tools_used.map((t) => t.tool).join(', ')}
+                        Tools: {Array.isArray(msg.tools_used) ? msg.tools_used.map((t) => t.tool).join(', ') : ''}
                       </p>
                     </div>
                   )}

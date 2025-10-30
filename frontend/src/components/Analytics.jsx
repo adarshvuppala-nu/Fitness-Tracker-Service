@@ -90,10 +90,10 @@ export const Analytics = () => {
     );
   }
 
-  const workoutTypeData = Object.entries(analytics.workout_by_type).map(([name, value]) => ({
+  const workoutTypeData = analytics && analytics.workout_by_type && typeof analytics.workout_by_type === 'object' ? Object.entries(analytics.workout_by_type).map(([name, value]) => ({
     name: name.charAt(0).toUpperCase() + name.slice(1),
     value,
-  }));
+  })) : [];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -218,7 +218,7 @@ export const Analytics = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {workoutTypeData.map((entry, index) => (
+                  {Array.isArray(workoutTypeData) && workoutTypeData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -240,7 +240,7 @@ export const Analytics = () => {
         </div>
       </div>
 
-      {analytics.achievements.length > 0 && (
+      {analytics && Array.isArray(analytics.achievements) && analytics.achievements.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
             <Award className="w-5 h-5 mr-2 text-yellow-500" />

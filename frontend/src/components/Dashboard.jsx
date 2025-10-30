@@ -56,12 +56,13 @@ export const Dashboard = () => {
     );
   }
 
-  const totalWorkouts = filteredWorkouts.length;
-  const totalCalories = filteredWorkouts.reduce(
-    (sum, w) => sum + (w.calories_burned || 0),
-    0
-  );
-  const activeGoals = filteredGoals.filter((g) => g.status === 'active').length;
+  const totalWorkouts = Array.isArray(filteredWorkouts) ? filteredWorkouts.length : 0;
+  const totalCalories = Array.isArray(filteredWorkouts)
+    ? filteredWorkouts.reduce((sum, w) => sum + (w.calories_burned || 0), 0)
+    : 0;
+  const activeGoals = Array.isArray(filteredGoals)
+    ? filteredGoals.filter((g) => g.status === 'active').length
+    : 0;
 
   return (
     <div className="space-y-6 animate-fade-in">
