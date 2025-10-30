@@ -30,6 +30,7 @@ env/
 # Environment Variables
 .env
 .env.local
+.env.aws
 
 # IDE
 .vscode/
@@ -74,3 +75,8 @@ docker-compose.override.yml
 
 # Render
 .render-buildpacks.json
+
+# AWS
+*.pem
+*.ppk
+.aws-credentials
