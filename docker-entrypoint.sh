@@ -39,6 +39,11 @@ except Exception as e:
     alembic upgrade head || {
         echo "WARNING: Migrations failed, but starting application anyway..."
     }
+
+    echo "Seeding database with demo data..."
+    python seed_data.py || {
+        echo "WARNING: Seed data failed, but starting application anyway..."
+    }
 else
     echo "WARNING: DATABASE_URL not set, skipping database setup"
 fi

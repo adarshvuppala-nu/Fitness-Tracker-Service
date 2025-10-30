@@ -45,22 +45,21 @@ if STATIC_EXISTS:
         return FileResponse(STATIC_DIR / "index.html")
 
     # Catch-all route for React Router (SPA support)
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        """
-        Catch-all route to serve React SPA for client-side routing.
-        Returns index.html for any route that doesn't match /api/v1/*
-        """
-        # Don't catch API routes
-        if full_path.startswith("api/"):
-            return {"detail": "Not Found"}
+    # This must be registered AFTER all API routes to avoid conflicts
+    from fastapi import Request
+    from fastapi.exceptions import HTTPException
 
-        # Check if the requested file exists in static directory
-        file_path = STATIC_DIR / full_path
-        if file_path.exists() and file_path.is_file():
-            return FileResponse(file_path)
+    @app.exception_handler(404)
+    async def custom_404_handler(request: Request, exc: HTTPException):
+        """
+        Custom 404 handler that serves the SPA for non-API routes.
+        API routes get normal 404 JSON responses.
+        """
+        # If it's an API request, return JSON 404
+        if request.url.path.startswith("/api/"):
+            return exc
 
-        # Otherwise, serve index.html for client-side routing
+        # For all other routes, serve the React SPA
         return FileResponse(STATIC_DIR / "index.html")
 else:
     # Development mode - API only
