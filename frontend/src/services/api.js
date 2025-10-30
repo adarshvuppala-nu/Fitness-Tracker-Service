@@ -69,10 +69,15 @@ export const clearMemory = async () => {
 };
 
 export const getUsers = async (skip = 0, limit = 100) => {
-  const response = await apiClient.get('/users', {
-    params: { skip, limit }
-  });
-  return response.data;
+  try {
+    const response = await apiClient.get('/users', {
+      params: { skip, limit }
+    });
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
 };
 
 export const getUser = async (userId) => {
@@ -97,10 +102,15 @@ export const deleteUser = async (userId) => {
 export const getWorkouts = async (filters = {}) => {
   const { user_id, date_from, date_to, skip = 0, limit = 100 } = filters;
 
-  const response = await apiClient.get('/workout-sessions', {
-    params: { user_id, date_from, date_to, skip, limit }
-  });
-  return response.data;
+  try {
+    const response = await apiClient.get('/workout-sessions', {
+      params: { user_id, date_from, date_to, skip, limit }
+    });
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Error fetching workouts:', error);
+    return [];
+  }
 };
 
 export const getWorkout = async (workoutId) => {
@@ -125,10 +135,15 @@ export const deleteWorkout = async (workoutId) => {
 export const getGoals = async (filters = {}) => {
   const { user_id, status, skip = 0, limit = 100 } = filters;
 
-  const response = await apiClient.get('/fitness-goals', {
-    params: { user_id, status, skip, limit }
-  });
-  return response.data;
+  try {
+    const response = await apiClient.get('/fitness-goals', {
+      params: { user_id, status, skip, limit }
+    });
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Error fetching goals:', error);
+    return [];
+  }
 };
 
 export const getGoal = async (goalId) => {

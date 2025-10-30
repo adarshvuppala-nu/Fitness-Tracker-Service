@@ -83,7 +83,7 @@ export const Dashboard = () => {
             className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-sm"
           >
             <option value="">All Users</option>
-            {users.map((user) => (
+            {Array.isArray(users) && users.map((user) => (
               <option key={user.id} value={user.id}>
                 {user.username}
               </option>
@@ -127,7 +127,7 @@ export const Dashboard = () => {
             </p>
           ) : (
             <div className="space-y-3">
-              {filteredWorkouts.slice(0, 5).map((workout) => (
+              {Array.isArray(filteredWorkouts) && filteredWorkouts.slice(0, 5).map((workout) => (
                 <div
                   key={workout.id}
                   className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl hover:shadow-md transition-all border border-gray-200 dark:border-gray-600"
@@ -169,7 +169,7 @@ export const Dashboard = () => {
             </p>
           ) : (
             <div className="space-y-3">
-              {filteredGoals
+              {Array.isArray(filteredGoals) && filteredGoals
                 .filter((g) => g.status === 'active')
                 .slice(0, 5)
                 .map((goal) => {
