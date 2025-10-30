@@ -80,3 +80,5 @@ docker-compose.override.yml
 *.pem
 *.ppk
 .aws-credentials
+
+AWS-DEPLOYMENT.md

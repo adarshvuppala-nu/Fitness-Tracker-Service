@@ -18,9 +18,9 @@ from app.core.config import settings
 FITNESS_KNOWLEDGE_BASE = """
 # Comprehensive Fitness & Wellness Knowledge Base
 
-## Workout Types and Benefits
+ Workout Types and Benefits
 
-### Cardiovascular Exercise
+# Cardiovascular Exercise
 Running: Improves cardiovascular health, burns 300-600 calories per hour. Ideal duration: 20-60 minutes.
 Best for: Weight loss, endurance, heart health.
 Recommended frequency: 3-5 times per week.
@@ -37,7 +37,7 @@ HIIT (High-Intensity Interval Training): Burns 500-800 calories in 30 minutes. B
 Best for: Fast fat loss, time efficiency, metabolic conditioning.
 Recommended frequency: 2-3 times per week (requires recovery).
 
-### Strength Training
+# Strength Training
 Weight Training: Builds muscle mass, increases metabolic rate, burns 200-400 calories per hour.
 Best for: Muscle building, bone density, strength gains.
 Recommended frequency: 3-5 times per week (split by muscle groups).
@@ -50,7 +50,7 @@ Powerlifting: Focuses on squat, bench press, deadlift. Maximum strength developm
 Best for: Absolute strength, power development.
 Recommended frequency: 3-4 times per week.
 
-### Flexibility & Recovery
+# Flexibility & Recovery
 Yoga: Improves flexibility, reduces stress, burns 150-300 calories per hour.
 Best for: Flexibility, stress relief, mindfulness.
 Recommended frequency: 2-4 times per week.
@@ -61,9 +61,9 @@ Recommended frequency: 2-3 times per week.
 
 Stretching: Essential for injury prevention and recovery. 10-15 minutes daily recommended.
 
-## Nutrition Guidelines
+ Nutrition Guidelines
 
-### Macronutrients
+# Macronutrients
 Protein: 1.6-2.2g per kg bodyweight for muscle building. Sources: chicken, fish, eggs, tofu, legumes.
 Essential for: Muscle repair, satiety, metabolic health.
 
@@ -73,70 +73,70 @@ Essential for: Energy, workout performance, recovery.
 Fats: 0.8-1.2g per kg bodyweight. Sources: avocado, nuts, olive oil, fatty fish.
 Essential for: Hormone production, vitamin absorption, brain health.
 
-### Hydration
+# Hydration
 Water intake: 30-40ml per kg bodyweight daily. More during intense training.
 Electrolytes: Important for workouts longer than 60 minutes.
 Pre-workout: Drink 400-600ml water 2-3 hours before exercise.
 During workout: 150-250ml every 15-20 minutes for intense sessions.
 Post-workout: Replace 150% of fluid lost through sweat.
 
-### Meal Timing
+# Meal Timing
 Pre-workout (2-3 hours before): Balanced meal with carbs and protein.
 Pre-workout (30-60 minutes before): Light snack, easily digestible carbs.
 Post-workout (within 2 hours): Protein and carbs for recovery.
 Daily: 4-6 smaller meals or 3 larger meals, based on preference.
 
-## Fitness Goals and Strategies
+ Fitness Goals and Strategies
 
-### Weight Loss
+# Weight Loss
 Caloric deficit: 300-500 calories below maintenance for sustainable loss.
 Expected loss: 0.5-1kg per week is healthy and sustainable.
 Training: Combine cardio (3-5x/week) with strength training (3x/week).
 Nutrition: High protein (2.2g/kg), moderate carbs, healthy fats.
 
-### Muscle Building (Hypertrophy)
+# Muscle Building (Hypertrophy)
 Caloric surplus: 200-300 calories above maintenance.
 Expected gain: 0.25-0.5kg per week (minimizing fat gain).
 Training: Progressive overload, 8-12 reps, 3-5 sets, 3-5x/week.
 Nutrition: High protein (2.0g/kg), sufficient carbs for energy.
 
-### Endurance Training
+# Endurance Training
 Focus: Gradually increase workout duration and intensity.
 Training: 60-80% max heart rate for aerobic base building.
 Long runs/rides: 1-2x per week at lower intensity.
 Nutrition: Higher carbohydrate intake (5-7g/kg bodyweight).
 
-### Strength Gains
+# Strength Gains
 Focus: Progressive overload with heavy weights (80-95% 1RM).
 Training: Low reps (3-6), high sets (4-6), longer rest periods (3-5 min).
 Frequency: 3-4x per week with adequate recovery.
 Nutrition: Sufficient calories and protein (1.8-2.2g/kg).
 
-## Recovery and Rest
+ Recovery and Rest
 
-### Sleep
+# Sleep
 Optimal duration: 7-9 hours per night for adults.
 Recovery benefits: Muscle repair, hormone regulation, cognitive function.
 Sleep quality: Dark room, cool temperature (18-20°C), consistent schedule.
 
-### Active Recovery
+# Active Recovery
 Light cardio: Walking, cycling at low intensity.
 Yoga or stretching: Improves flexibility and blood flow.
 Frequency: 1-2 sessions per week between intense workouts.
 
-### Rest Days
+# Rest Days
 Importance: Prevents overtraining, reduces injury risk, allows adaptation.
 Recommendation: At least 1-2 full rest days per week.
 
-### Injury Prevention
+# Injury Prevention
 Warm-up: 5-10 minutes light cardio + dynamic stretching.
 Cool-down: 5-10 minutes light activity + static stretching.
 Form: Proper technique is more important than weight.
 Progression: Increase intensity/volume gradually (10% rule).
 
-## Common Workout Metrics
+ Common Workout Metrics
 
-### Heart Rate Zones
+# Heart Rate Zones
 Zone 1 (50-60% max HR): Very light, recovery
 Zone 2 (60-70% max HR): Light, fat burning
 Zone 3 (70-80% max HR): Moderate, aerobic fitness
@@ -145,7 +145,7 @@ Zone 5 (90-100% max HR): Maximum, anaerobic
 
 Max Heart Rate estimation: 220 - age
 
-### Caloric Burn Estimates
+# Caloric Burn Estimates
 Walking (4 km/h): 200-300 cal/hour
 Running (8 km/h): 400-600 cal/hour
 Cycling (20 km/h): 400-600 cal/hour
@@ -156,9 +156,9 @@ Yoga: 150-300 cal/hour
 
 Note: Actual burn varies by weight, intensity, fitness level.
 
-## Progress Tracking
+ Progress Tracking
 
-### Key Metrics to Monitor
+# Key Metrics to Monitor
 Body weight: Weekly weigh-ins, same time/conditions
 Body composition: Body fat percentage, muscle mass
 Measurements: Waist, hips, chest, arms, thighs
@@ -168,7 +168,7 @@ Energy levels: Subjective rating of daily energy
 Sleep quality: Duration and restfulness
 Stress levels: Impact on training and recovery
 
-### Goal Setting Framework (SMART)
+# Goal Setting Framework (SMART)
 Specific: Clear, well-defined objectives
 Measurable: Quantifiable metrics for progress
 Achievable: Realistic based on current fitness level
@@ -181,9 +181,9 @@ Examples of SMART goals:
 - "Run 5km in under 25 minutes within 12 weeks"
 - "Attend yoga class 2x per week for 6 weeks to improve flexibility"
 
-## Supplements (Optional)
+ Supplements (Optional)
 
-### Evidence-Based Supplements
+# Evidence-Based Supplements
 Protein powder: Convenient protein source, 20-30g per serving
 Creatine: 3-5g daily improves strength and power output
 Caffeine: 3-6mg/kg bodyweight pre-workout for performance
@@ -193,49 +193,49 @@ Multivitamin: Insurance against dietary gaps
 
 Note: Whole foods should be the primary nutrition source.
 
-## Mental Health & Fitness
+ Mental Health & Fitness
 
-### Exercise Benefits for Mental Health
+# Exercise Benefits for Mental Health
 Reduces anxiety and depression symptoms
 Improves mood through endorphin release
 Enhances cognitive function and memory
 Boosts self-esteem and confidence
 Promotes better sleep quality
 
-### Mind-Body Connection
+# Mind-Body Connection
 Meditation: 10-20 minutes daily reduces stress
 Mindful exercise: Yoga, tai chi for mental clarity
 Breathing techniques: 4-7-8 breathing for relaxation
 Visualization: Mental rehearsal improves performance
 
-### Avoiding Burnout
+# Avoiding Burnout
 Listen to your body: Rest when needed
 Variety: Mix different workout types
 Social support: Train with friends or groups
 Realistic expectations: Progress takes time
 Enjoy the process: Find activities you love
 
-## Special Populations
+ Special Populations
 
-### Beginners
+# Beginners
 Start slowly: 2-3 workouts per week
 Focus on form: Master technique before adding weight
 Build base: Cardio and bodyweight exercises
 Seek guidance: Consider working with a trainer initially
 
-### Advanced Athletes
+# Advanced Athletes
 Periodization: Structured training phases (hypertrophy, strength, power, deload)
 Sport-specific: Tailor training to performance goals
 Recovery: Prioritize sleep, nutrition, stress management
 Testing: Regular assessment of progress (1RM tests, time trials)
 
-### Older Adults (50+)
+# Older Adults (50+)
 Resistance training: Crucial for maintaining muscle mass and bone density
 Balance exercises: Prevent falls and maintain functional fitness
 Low-impact options: Swimming, cycling, walking
 Flexibility: Daily stretching and mobility work
 
-### Pregnancy & Postpartum
+# Pregnancy & Postpartum
 Consult healthcare provider before starting/continuing exercise
 Avoid: High-impact, contact sports, exercises lying flat on back (after 1st trimester)
 Focus on: Core stability, pelvic floor exercises, moderate cardio

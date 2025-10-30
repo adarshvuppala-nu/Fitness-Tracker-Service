@@ -2,16 +2,16 @@
 
 Production-ready full-stack fitness tracking application with AI-powered coaching, built with FastAPI, React, LangChain, and OpenAI.
 
-## Features
+ Features
 
-### Core Backend
+# Core Backend
 - REST API with FastAPI for Users, Workouts, Goals, and Progress Metrics
 - PostgreSQL database with Alembic migrations
 - UUID-based primary keys and comprehensive validation
 - Full CRUD operations with filtering and pagination
 - Automatic API documentation (Swagger UI)
 
-### AI Integration
+# AI Integration
 - AI Chat Assistant: Conversational fitness coach powered by GPT-4o-mini
 - Custom Tools: Calculator, Weather, Web Search, Fitness Data Query
 - RAG Pipeline: FAISS vector store with fitness knowledge base
@@ -19,7 +19,7 @@ Production-ready full-stack fitness tracking application with AI-powered coachin
 - React Frontend: Responsive dashboard and real-time chat interface
 - Dark/Light Theme: Persistent theme switching with TailwindCSS
 
-## Tech Stack
+ Tech Stack
 
 **Backend:**
 - FastAPI 0.115.0
@@ -38,7 +38,7 @@ Production-ready full-stack fitness tracking application with AI-powered coachin
 - Axios
 - Lucide Icons
 
-## Prerequisites
+ Prerequisites
 
 - Python 3.9+
 - Node.js 18+
@@ -47,16 +47,16 @@ Production-ready full-stack fitness tracking application with AI-powered coachin
 - (Optional) OpenWeatherMap API Key
 - (Optional) Langfuse Account
 
-## Quick Start
+ Quick Start
 
-### 1. Clone Repository
+# 1. Clone Repository
 
 ```bash
 git clone https://github.com/adarshvuppala-nu/Fitness-Tracker-Service.git
 cd Fitness-Tracker-Service
 ```
 
-### 2. Backend Setup
+# 2. Backend Setup
 
 ```bash
 # Start PostgreSQL
@@ -83,7 +83,7 @@ uvicorn main:app --reload --port 8000
 Backend API: http://localhost:8000
 API Docs: http://localhost:8000/docs
 
-### 3. Frontend Setup
+# 3. Frontend Setup
 
 ```bash
 cd frontend
@@ -97,7 +97,7 @@ npm run dev
 
 Frontend App: http://localhost:3000
 
-## Environment Variables
+ Environment Variables
 
 Create `.env` in the root directory:
 
@@ -127,9 +127,9 @@ LANGFUSE_SECRET_KEY=sk-lf-...
 LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
-## API Endpoints
+ API Endpoints
 
-### Core CRUD
+# Core CRUD
 - `POST /api/v1/users` - Create user
 - `GET /api/v1/users` - List users
 - `GET /api/v1/users/{id}` - Get user
@@ -141,16 +141,16 @@ Similar patterns for:
 - `/api/v1/fitness-goals`
 - `/api/v1/progress-metrics`
 
-### AI Assistant
+# AI Assistant
 - `POST /api/v1/ai/chat` - Chat with AI agent
 - `GET /api/v1/ai/agent` - Agent info
 - `GET /api/v1/ai/tools` - Available tools
 - `GET /api/v1/ai/health` - Service health
 - `POST /api/v1/ai/clear-memory` - Clear chat history
 
-## Usage Examples
+ Usage Examples
 
-### Chat with AI
+# Chat with AI
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/ai/chat \
@@ -162,7 +162,7 @@ curl -X POST http://localhost:8000/api/v1/ai/chat \
   }'
 ```
 
-### Create Workout
+# Create Workout
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/workout-sessions \
@@ -176,9 +176,9 @@ curl -X POST http://localhost:8000/api/v1/workout-sessions \
   }'
 ```
 
-## Development
+ Development
 
-### Run Tests
+# Run Tests
 
 ```bash
 # Backend tests
@@ -188,7 +188,7 @@ pytest tests/ -v
 cd frontend && npm test
 ```
 
-### Database Migrations
+# Database Migrations
 
 ```bash
 # Create new migration
@@ -201,7 +201,7 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-## Project Structure
+ Project Structure
 
 ```
 fitness-tracker-api/
@@ -230,9 +230,9 @@ fitness-tracker-api/
     └── vite.config.js
 ```
 
-## Deployment
+ Deployment
 
-### Backend
+# Backend
 
 ```bash
 # Build production
@@ -242,7 +242,7 @@ pip install -r requirements.txt
 gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
 ```
 
-### Frontend
+# Frontend
 
 ```bash
 cd frontend
@@ -250,7 +250,7 @@ npm run build
 # Deploy dist/ folder to hosting (Vercel, Netlify, etc.)
 ```
 
-## AI Agent Capabilities
+ AI Agent Capabilities
 
 1. Query Fitness Data: Retrieve workouts, goals, and progress metrics
 2. Calculate Metrics: BMI, TDEE, macro splits, calorie needs
@@ -259,7 +259,7 @@ npm run build
 5. Provide Coaching: Evidence-based fitness and nutrition advice
 6. Context Aware: RAG-augmented responses with fitness knowledge base
 
-## Observability
+ Observability
 
 If Langfuse is configured, all LLM interactions are traced:
 
@@ -271,7 +271,7 @@ If Langfuse is configured, all LLM interactions are traced:
 
 View traces at: https://cloud.langfuse.com
 
-## Contributing
+ Contributing
 
 1. Fork repository
 2. Create feature branch
@@ -279,10 +279,10 @@ View traces at: https://cloud.langfuse.com
 4. Push to branch
 5. Create Pull Request
 
-## License
+ License
 
 MIT License
 
-## Support
+ Support
 
 Issues: https://github.com/adarshvuppala-nu/Fitness-Tracker-Service/issues
