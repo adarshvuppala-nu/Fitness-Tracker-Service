@@ -3,7 +3,8 @@ FROM node:20-slim AS frontend-builder
 WORKDIR /frontend
 
 COPY frontend/package*.json ./
-RUN npm install && npm cache clean --force
+# Clean out old modules and lock files to prevent npm bugs
+RUN rm -rf node_modules package-lock.json && npm install --legacy-peer-deps && npm cache clean --force
 
 COPY frontend/ ./
 RUN npm run build
