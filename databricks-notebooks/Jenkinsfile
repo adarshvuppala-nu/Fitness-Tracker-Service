@@ -15,47 +15,45 @@ pipeline {
         }
 
         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'python:3.9-slim'
+                    reuseNode true
+                }
+            }
             steps {
                 sh '''
-                    apt-get update && apt-get install -y python3 python3-pip
                     pip3 install databricks-cli
                     databricks --version
                 '''
             }
         }
 
-        stage('Configure Databricks') {
+        stage('Deploy Notebooks') {
+            agent {
+                docker {
+                    image 'python:3.9-slim'
+                    reuseNode true
+                }
+            }
             steps {
                 sh '''
+                    pip3 install databricks-cli
+
                     cat > ~/.databrickscfg <<EOF
 [DEFAULT]
 host = ${DATABRICKS_HOST}
 token = ${DATABRICKS_TOKEN}
 EOF
-                '''
-            }
-        }
 
-        stage('Deploy Bronze Notebook') {
-            steps {
-                sh '''
                     databricks workspace import databricks-notebooks/bronze/01_bronze_layer_ingestion.py /Users/vuppalaadarsh28@gmail.com/01_bronze_layer_ingestion --language PYTHON --format SOURCE --overwrite
-                '''
-            }
-        }
+                    echo 'Bronze layer deployed'
 
-        stage('Deploy Silver Notebook') {
-            steps {
-                sh '''
                     databricks workspace import databricks-notebooks/silver/02_silver_layer_transformation.py /Users/vuppalaadarsh28@gmail.com/02_silver_layer_transformation --language PYTHON --format SOURCE --overwrite
-                '''
-            }
-        }
+                    echo 'Silver layer deployed'
 
-        stage('Deploy Gold Notebook') {
-            steps {
-                sh '''
                     databricks workspace import databricks-notebooks/gold/03_gold_layer_analytics.py /Users/vuppalaadarsh28@gmail.com/03_gold_layer_analytics --language PYTHON --format SOURCE --overwrite
+                    echo 'Gold layer deployed'
                 '''
             }
         }
