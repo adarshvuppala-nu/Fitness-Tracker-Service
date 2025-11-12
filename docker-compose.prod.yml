@@ -24,7 +24,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.monolith
     container_name: fitness_tracker_app
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-fitness_user}:${POSTGRES_PASSWORD:-fitness_password}@postgres:5432/${POSTGRES_DB:-fitness_tracker}
