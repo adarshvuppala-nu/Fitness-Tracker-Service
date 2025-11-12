@@ -1,14 +1,17 @@
 """AI Agent API Endpoints"""
 
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, HTTPException, Body, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 import json
 import asyncio
 
 from app.agent import get_agent, get_agent_info
 from app.tools import get_tools_info
+from app.ai_intelligence import get_ai_service
+from app.api.deps import get_db
 
 
 class ChatRequest(BaseModel):
@@ -274,4 +277,122 @@ async def get_memory():
         raise HTTPException(
             status_code=500,
             detail=f"Failed to retrieve memory: {str(e)}"
+        )
+
+
+@router.get("/insights/{user_id}")
+async def get_ai_insights(
+    user_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Generate personalized AI insights for a user.
+
+    Analyzes workout history and generates insights about:
+    - Patterns and trends in training
+    - Achievements and milestones
+    - Areas for improvement
+    - Specific recommendations
+    - Warnings about potential issues
+
+    Args:
+        user_id: User UUID
+        db: Database session
+
+    Returns:
+        AI-generated insights with summary and motivation
+
+    Example:
+        ```
+        GET /api/v1/insights/123e4567-e89b-12d3-a456-426614174000
+        ```
+    """
+    try:
+        ai_service = get_ai_service()
+        insights = await ai_service.generate_insights(db, user_id)
+        return insights
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate insights: {str(e)}"
+        )
+
+
+@router.get("/predict-goals/{user_id}")
+async def predict_goal_completion(
+    user_id: str,
+    goal_id: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Predict when user will complete their fitness goals.
+
+    Uses AI to analyze workout patterns and predict realistic
+    completion dates for active goals. Provides recommendations
+    to achieve goals faster.
+
+    Args:
+        user_id: User UUID
+        goal_id: Optional specific goal ID to analyze
+        db: Database session
+
+    Returns:
+        List of goal predictions with completion dates and recommendations
+
+    Example:
+        ```
+        GET /api/v1/predict-goals/123e4567-e89b-12d3-a456-426614174000
+        GET /api/v1/predict-goals/123e4567-e89b-12d3-a456-426614174000?goal_id=abc123
+        ```
+    """
+    try:
+        ai_service = get_ai_service()
+        predictions = await ai_service.predict_goal_completion(db, user_id, goal_id)
+        return {
+            "predictions": predictions,
+            "count": len(predictions),
+            "success": True
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to predict goals: {str(e)}"
+        )
+
+
+@router.get("/recommend-workout/{user_id}")
+async def get_workout_recommendation(
+    user_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Get AI-powered workout recommendation for the user.
+
+    Analyzes recent workout history, recovery time, and goals
+    to recommend the optimal next workout. Considers:
+    - Workout variety and muscle group balance
+    - Recovery time needed
+    - User's fitness goals
+    - Recent activity patterns
+
+    Args:
+        user_id: User UUID
+        db: Database session
+
+    Returns:
+        Personalized workout recommendation with tips and alternatives
+
+    Example:
+        ```
+        GET /api/v1/recommend-workout/123e4567-e89b-12d3-a456-426614174000
+        ```
+    """
+    try:
+        ai_service = get_ai_service()
+        recommendation = await ai_service.recommend_workout(db, user_id)
+        return recommendation
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate workout recommendation: {str(e)}"
         )

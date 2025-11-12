@@ -68,8 +68,12 @@ export const Analytics = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600" />
+      <div className="flex flex-col items-center justify-center h-96 space-y-4 animate-fade-in">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-primary rounded-full blur-2xl opacity-30 animate-pulse-slow" />
+          <div className="relative animate-spin rounded-full h-16 w-16 border-4 border-transparent border-t-primary-600 border-r-secondary-600" />
+        </div>
+        <p className="text-gray-600 dark:text-gray-400 font-semibold">Analyzing your performance...</p>
       </div>
     );
   }
@@ -96,11 +100,13 @@ export const Analytics = () => {
   })) : [];
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Analytics</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+    <div className="space-y-8 animate-fade-in-up">
+      {/* Analytics Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div className="space-y-2">
+          <h2 className="text-4xl font-display font-bold text-gray-900 dark:text-white">Analytics</h2>
+          <p className="text-base font-medium text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-gradient-primary animate-pulse" />
             Comprehensive workout insights and trends
           </p>
         </div>
@@ -109,7 +115,7 @@ export const Analytics = () => {
           <select
             value={days}
             onChange={(e) => setDays(Number(e.target.value))}
-            className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-sm"
+            className="px-5 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all shadow-sm hover:shadow-md cursor-pointer"
           >
             <option value={7}>Last 7 days</option>
             <option value={30}>Last 30 days</option>
@@ -119,9 +125,9 @@ export const Analytics = () => {
 
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-colors shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-gradient-primary hover:opacity-90 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-95 font-bold"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4" strokeWidth={2.5} />
             Export
           </button>
         </div>
@@ -155,8 +161,8 @@ export const Analytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mb-6">
             Weekly Trend
           </h3>
           {analytics.weekly_trend.length > 0 ? (
@@ -201,8 +207,8 @@ export const Analytics = () => {
           )}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mb-6">
             Workout Distribution
           </h3>
           {workoutTypeData.length > 0 ? (
@@ -218,7 +224,7 @@ export const Analytics = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {Array.isArray(workoutTypeData) && workoutTypeData.map((entry, index) => (
+                  {Array.isArray(workoutTypeData) && workoutTypeData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -241,9 +247,9 @@ export const Analytics = () => {
       </div>
 
       {analytics && Array.isArray(analytics.achievements) && analytics.achievements.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-            <Award className="w-5 h-5 mr-2 text-yellow-500" />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <Award className="w-6 h-6 text-yellow-500" strokeWidth={2} />
             Achievements
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -272,8 +278,8 @@ export const Analytics = () => {
       )}
 
       {streak && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mb-6">
             Workout Streaks
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -302,8 +308,23 @@ export const Analytics = () => {
   );
 };
 
-const StatCard = ({ icon: Icon, title, value, color }) => {
+const StatCard = ({ icon, title, value, color }) => {
+  const Icon = icon;
   const gradients = {
+    blue: 'from-blue-500 via-cyan-500 to-blue-600',
+    green: 'from-green-500 via-emerald-500 to-teal-600',
+    orange: 'from-orange-500 via-amber-500 to-red-500',
+    purple: 'from-purple-500 via-pink-500 to-rose-500',
+  };
+
+  const bgGradients = {
+    blue: 'from-blue-500/10 via-cyan-500/10 to-blue-600/10',
+    green: 'from-green-500/10 via-emerald-500/10 to-teal-600/10',
+    orange: 'from-orange-500/10 via-amber-500/10 to-red-500/10',
+    purple: 'from-purple-500/10 via-pink-500/10 to-rose-500/10',
+  };
+
+  const iconBg = {
     blue: 'from-blue-500 to-cyan-500',
     green: 'from-green-500 to-emerald-500',
     orange: 'from-orange-500 to-red-500',
@@ -311,23 +332,30 @@ const StatCard = ({ icon: Icon, title, value, color }) => {
   };
 
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden">
-      <div className="p-6">
+    <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-500 overflow-hidden card-hover border border-gray-200 dark:border-gray-700">
+      <div className={`absolute inset-0 bg-gradient-to-br ${bgGradients[color]} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+      <div className="relative p-6">
         <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          <div className="flex-1 space-y-2">
+            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               {title}
             </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2 group-hover:scale-105 transition-transform">
+            <p className="text-3xl font-display font-bold text-gray-900 dark:text-white group-hover:scale-105 transition-transform duration-300">
               {value}
             </p>
           </div>
-          <div className={`relative p-3 rounded-2xl bg-gradient-to-br ${gradients[color]} shadow-lg group-hover:scale-110 transition-transform`}>
-            <Icon className="w-6 h-6 text-white" />
+
+          <div className="relative">
+            <div className={`absolute inset-0 bg-gradient-to-br ${iconBg[color]} rounded-2xl blur-xl opacity-50 group-hover:opacity-75 animate-pulse-slow`} />
+            <div className={`relative p-3 rounded-2xl bg-gradient-to-br ${iconBg[color]} shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+              <Icon className="w-6 h-6 text-white" strokeWidth={2} />
+            </div>
           </div>
         </div>
       </div>
-      <div className={`h-1 bg-gradient-to-r ${gradients[color]}`}></div>
+
+      <div className={`h-1 bg-gradient-to-r ${gradients[color]} group-hover:h-1.5 transition-all duration-300`} />
     </div>
   );
 };

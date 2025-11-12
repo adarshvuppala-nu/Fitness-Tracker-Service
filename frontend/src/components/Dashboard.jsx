@@ -4,8 +4,13 @@ import { getUsers, getWorkouts, getGoals } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAppContext } from '../contexts/AppContext';
 import { BMICalculator } from './BMICalculator';
+import { MotivationCard } from './MotivationCard';
+import { FloatingActionButton } from './FloatingActionButton';
+import { AIInsightsCard } from './AIInsightsCard';
+import { GoalPredictions } from './GoalPredictions';
+import { WorkoutRecommendation } from './WorkoutRecommendation';
 
-export const Dashboard = () => {
+export const Dashboard = ({ refreshTrigger, onAddWorkout, onAddGoal }) => {
   const [users, setUsers] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [goals, setGoals] = useState([]);
@@ -14,7 +19,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshTrigger]);
 
   const fetchData = async () => {
     try {
@@ -50,8 +55,12 @@ export const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600" />
+      <div className="flex flex-col items-center justify-center h-96 space-y-4 animate-fade-in">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-primary rounded-full blur-2xl opacity-30 animate-pulse-slow" />
+          <div className="relative animate-spin rounded-full h-16 w-16 border-4 border-transparent border-t-primary-600 border-r-secondary-600" />
+        </div>
+        <p className="text-gray-600 dark:text-gray-400 font-semibold">Loading your fitness data...</p>
       </div>
     );
   }
@@ -65,13 +74,24 @@ export const Dashboard = () => {
     : 0;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+    <>
+      <FloatingActionButton
+        onAddWorkout={onAddWorkout}
+        onAddGoal={onAddGoal}
+      />
+
+      <div className="space-y-8 animate-fade-in-up">
+        {/* Motivation Card */}
+        <MotivationCard />
+
+        {/* Dashboard Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div className="space-y-2">
+          <h2 className="text-4xl font-display font-bold text-gray-900 dark:text-white">
             Dashboard
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-base font-medium text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-gradient-primary animate-pulse" />
             Track your fitness journey and achievements
           </p>
         </div>
@@ -80,7 +100,7 @@ export const Dashboard = () => {
           <select
             value={selectedUser || ''}
             onChange={(e) => setSelectedUser(e.target.value)}
-            className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-sm"
+            className="px-5 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:focus:border-primary-400 transition-all shadow-sm hover:shadow-md cursor-pointer"
           >
             <option value="">All Users</option>
             {Array.isArray(users) && users.map((user) => (
@@ -113,39 +133,74 @@ export const Dashboard = () => {
         />
       </div>
 
+      {/* AI-Powered Features Section */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-gradient-primary opacity-20" />
+          <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">
+            🤖 AI-Powered Intelligence
+          </h2>
+          <div className="h-px flex-1 bg-gradient-primary opacity-20" />
+        </div>
+
+        {/* Top Row: Insights and Recommendation */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <AIInsightsCard />
+          <WorkoutRecommendation />
+        </div>
+
+        {/* Bottom Row: Goal Predictions */}
+        <GoalPredictions />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-            <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg mr-3">
-              <Calendar className="w-5 h-5 text-white" />
+        {/* Recent Workouts Card */}
+        <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-blue-cyan rounded-xl blur-md opacity-50" />
+              <div className="relative p-3 bg-gradient-blue-cyan rounded-xl shadow-lg">
+                <Calendar className="w-5 h-5 text-white" strokeWidth={2} />
+              </div>
             </div>
-            Recent Workouts
-          </h3>
+            <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white">
+              Recent Workouts
+            </h3>
+          </div>
+
           {filteredWorkouts.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              No workouts recorded
-            </p>
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 mb-4">
+                <Calendar className="w-8 h-8 text-gray-400" />
+              </div>
+              <p className="text-gray-500 dark:text-gray-400 font-medium">
+                No workouts recorded yet
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                Start tracking your fitness journey!
+              </p>
+            </div>
           ) : (
             <div className="space-y-3">
               {Array.isArray(filteredWorkouts) && filteredWorkouts.slice(0, 5).map((workout) => (
                 <div
                   key={workout.id}
-                  className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl hover:shadow-md transition-all border border-gray-200 dark:border-gray-600"
+                  className="group/item p-4 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-700/50 dark:via-gray-800/50 dark:to-gray-700/50 rounded-xl hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 cursor-pointer"
                 >
                   <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white capitalize">
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900 dark:text-white capitalize group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">
                         {workout.type}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                         {workout.date}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">
                         {workout.duration} min
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                         {Math.round(workout.calories_burned)} cal
                       </p>
                     </div>
@@ -156,19 +211,34 @@ export const Dashboard = () => {
           )}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mr-3">
-              <Target className="w-5 h-5 text-white" />
+        {/* Active Goals Card */}
+        <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-purple-pink rounded-xl blur-md opacity-50" />
+              <div className="relative p-3 bg-gradient-purple-pink rounded-xl shadow-lg">
+                <Target className="w-5 h-5 text-white" strokeWidth={2} />
+              </div>
             </div>
-            Active Goals
-          </h3>
+            <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white">
+              Active Goals
+            </h3>
+          </div>
+
           {filteredGoals.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              No goals set
-            </p>
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 mb-4">
+                <Target className="w-8 h-8 text-gray-400" />
+              </div>
+              <p className="text-gray-500 dark:text-gray-400 font-medium">
+                No goals set yet
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                Set your first goal and start achieving!
+              </p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {Array.isArray(filteredGoals) && filteredGoals
                 .filter((g) => g.status === 'active')
                 .slice(0, 5)
@@ -178,23 +248,26 @@ export const Dashboard = () => {
                   return (
                     <div
                       key={goal.id}
-                      className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl hover:shadow-md transition-all border border-gray-200 dark:border-gray-600"
+                      className="group/item p-4 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-700/50 dark:via-gray-800/50 dark:to-gray-700/50 rounded-xl hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-600 cursor-pointer"
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <p className="font-medium text-gray-900 dark:text-white capitalize">
+                      <div className="flex justify-between items-start mb-3">
+                        <p className="font-semibold text-gray-900 dark:text-white capitalize group-hover/item:text-purple-600 dark:group-hover/item:text-purple-400 transition-colors">
                           {goal.goal_type.replace(/_/g, ' ')}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="px-2.5 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full">
                           {Math.round(progress)}%
-                        </p>
+                        </span>
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+
+                      {/* Progress Bar */}
+                      <div className="relative w-full h-2.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden mb-2">
                         <div
-                          className="bg-primary-600 dark:bg-primary-400 h-2 rounded-full transition-all"
+                          className="absolute inset-y-0 left-0 bg-gradient-purple-pink rounded-full transition-all duration-500 ease-out"
                           style={{ width: `${Math.min(progress, 100)}%` }}
                         />
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
                         {goal.current_value} / {goal.target_value} {goal.unit}
                       </p>
                     </div>
@@ -204,43 +277,61 @@ export const Dashboard = () => {
           )}
         </div>
 
-        <BMICalculator />
+          <BMICalculator />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 const StatCard = ({ icon: Icon, title, value, color }) => {
   const gradients = {
+    blue: 'from-blue-500 via-cyan-500 to-blue-600',
+    green: 'from-green-500 via-emerald-500 to-teal-600',
+    purple: 'from-purple-500 via-pink-500 to-rose-500',
+  };
+
+  const bgGradients = {
+    blue: 'from-blue-500/10 via-cyan-500/10 to-blue-600/10',
+    green: 'from-green-500/10 via-emerald-500/10 to-teal-600/10',
+    purple: 'from-purple-500/10 via-pink-500/10 to-rose-500/10',
+  };
+
+  const iconBg = {
     blue: 'from-blue-500 to-cyan-500',
     green: 'from-green-500 to-emerald-500',
     purple: 'from-purple-500 to-pink-500',
   };
 
-  const glowColors = {
-    blue: 'shadow-blue-500/50',
-    green: 'shadow-green-500/50',
-    purple: 'shadow-purple-500/50',
-  };
-
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-      <div className="p-6">
+    <div className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-elevation-medium hover:shadow-elevation-high transition-all duration-500 overflow-hidden card-hover border border-gray-200 dark:border-gray-700">
+      {/* Animated Background Gradient */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${bgGradients[color]} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+      {/* Content */}
+      <div className="relative p-6">
         <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          <div className="flex-1 space-y-2">
+            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               {title}
             </p>
-            <p className="text-4xl font-bold text-gray-900 dark:text-white mt-2 group-hover:scale-105 transition-transform">
+            <p className="text-4xl font-display font-bold text-gray-900 dark:text-white group-hover:scale-105 transition-transform duration-300">
               {value}
             </p>
           </div>
-          <div className={`relative p-4 rounded-2xl bg-gradient-to-br ${gradients[color]} ${glowColors[color]} shadow-lg group-hover:scale-110 transition-transform`}>
-            <Icon className="w-8 h-8 text-white" />
+
+          {/* Icon with Glow Effect */}
+          <div className="relative">
+            <div className={`absolute inset-0 bg-gradient-to-br ${iconBg[color]} rounded-2xl blur-xl opacity-50 group-hover:opacity-75 animate-pulse-slow`} />
+            <div className={`relative p-4 rounded-2xl bg-gradient-to-br ${iconBg[color]} shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+              <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+            </div>
           </div>
         </div>
       </div>
-      <div className={`h-1.5 bg-gradient-to-r ${gradients[color]}`}></div>
+
+      {/* Bottom Accent Bar */}
+      <div className={`h-1 bg-gradient-to-r ${gradients[color]} group-hover:h-1.5 transition-all duration-300`} />
     </div>
   );
 };

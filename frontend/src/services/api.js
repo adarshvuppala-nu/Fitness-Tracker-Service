@@ -68,6 +68,52 @@ export const clearMemory = async () => {
   return response.data;
 };
 
+// AI Intelligence Features
+export const getAIInsights = async (userId) => {
+  try {
+    const response = await apiClient.get(`/ai/insights/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching AI insights:', error);
+    return {
+      insights: [],
+      summary: 'Unable to generate insights at this time.',
+      motivation: 'Keep up the great work!',
+      success: false
+    };
+  }
+};
+
+export const predictGoals = async (userId, goalId = null) => {
+  try {
+    const response = await apiClient.get(`/ai/predict-goals/${userId}`, {
+      params: goalId ? { goal_id: goalId } : {}
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error predicting goals:', error);
+    return { predictions: [], count: 0, success: false };
+  }
+};
+
+export const getWorkoutRecommendation = async (userId) => {
+  try {
+    const response = await apiClient.get(`/ai/recommend-workout/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting workout recommendation:', error);
+    return {
+      workout_type: 'Moderate Cardio',
+      duration: 30,
+      intensity: 'moderate',
+      reasoning: 'A balanced workout to maintain fitness.',
+      tips: ['Warm up first', 'Stay hydrated', 'Cool down after'],
+      alternatives: ['Walking', 'Cycling'],
+      success: false
+    };
+  }
+};
+
 export const getUsers = async (skip = 0, limit = 100) => {
   try {
     const response = await apiClient.get('/users', {
@@ -119,17 +165,17 @@ export const getWorkout = async (workoutId) => {
 };
 
 export const createWorkout = async (workoutData) => {
-  const response = await apiClient.post('/workout-sessions', workoutData);
+  const response = await apiClient.post('/workout-sessions/', workoutData);
   return response.data;
 };
 
 export const updateWorkout = async (workoutId, workoutData) => {
-  const response = await apiClient.put(`/workout-sessions/${workoutId}`, workoutData);
+  const response = await apiClient.put(`/workout-sessions/${workoutId}/`, workoutData);
   return response.data;
 };
 
 export const deleteWorkout = async (workoutId) => {
-  await apiClient.delete(`/workout-sessions/${workoutId}`);
+  await apiClient.delete(`/workout-sessions/${workoutId}/`);
 };
 
 export const getGoals = async (filters = {}) => {
@@ -152,17 +198,17 @@ export const getGoal = async (goalId) => {
 };
 
 export const createGoal = async (goalData) => {
-  const response = await apiClient.post('/fitness-goals', goalData);
+  const response = await apiClient.post('/fitness-goals/', goalData);
   return response.data;
 };
 
 export const updateGoal = async (goalId, goalData) => {
-  const response = await apiClient.put(`/fitness-goals/${goalId}`, goalData);
+  const response = await apiClient.put(`/fitness-goals/${goalId}/`, goalData);
   return response.data;
 };
 
 export const deleteGoal = async (goalId) => {
-  await apiClient.delete(`/fitness-goals/${goalId}`);
+  await apiClient.delete(`/fitness-goals/${goalId}/`);
 };
 
 export const getProgressMetrics = async (filters = {}) => {

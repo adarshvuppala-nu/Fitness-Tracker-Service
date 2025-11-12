@@ -1,6 +1,5 @@
 from datetime import datetime, date
 from typing import Optional
-from uuid import UUID
 
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -13,7 +12,7 @@ class GoalBase(BaseModel):
 
 
 class GoalCreate(GoalBase):
-    user_id: UUID
+    user_id: int
     current_value: float = 0.0
 
 
@@ -27,8 +26,8 @@ class GoalUpdate(BaseModel):
 
 
 class GoalResponse(GoalBase):
-    id: UUID
-    user_id: UUID
+    id: int
+    user_id: int
     current_value: float
     status: str
     created_at: datetime

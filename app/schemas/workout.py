@@ -1,6 +1,5 @@
 from datetime import datetime, date
 from typing import Optional
-from uuid import UUID
 
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -14,7 +13,7 @@ class WorkoutBase(BaseModel):
 
 
 class WorkoutCreate(WorkoutBase):
-    user_id: UUID
+    user_id: int
 
 
 class WorkoutUpdate(BaseModel):
@@ -26,8 +25,8 @@ class WorkoutUpdate(BaseModel):
 
 
 class WorkoutResponse(WorkoutBase):
-    id: UUID
-    user_id: UUID
+    id: int
+    user_id: int
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
