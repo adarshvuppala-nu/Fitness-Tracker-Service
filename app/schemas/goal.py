@@ -14,6 +14,7 @@ class GoalBase(BaseModel):
 class GoalCreate(GoalBase):
     user_id: int
     current_value: float = 0.0
+    status: str = "active"
 
 
 class GoalUpdate(BaseModel):
