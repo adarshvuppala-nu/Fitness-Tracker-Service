@@ -1,5 +1,4 @@
 from typing import Optional, List
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -24,7 +23,7 @@ def create_goal(goal_in: GoalCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{goal_id}", response_model=GoalResponse)
-def get_goal(goal_id: UUID, db: Session = Depends(get_db)):
+def get_goal(goal_id: int, db: Session = Depends(get_db)):
     db_goal = crud_goal.get(db=db, id=goal_id)
     if not db_goal:
         raise HTTPException(
@@ -36,7 +35,7 @@ def get_goal(goal_id: UUID, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[GoalResponse])
 def list_goals(
-    user_id: Optional[UUID] = None,
+    user_id: Optional[int] = None,
     status: Optional[str] = None,
     skip: int = 0,
     limit: int = 10,
@@ -54,7 +53,7 @@ def list_goals(
 
 
 @router.put("/{goal_id}", response_model=GoalResponse)
-def update_goal(goal_id: UUID, goal_in: GoalUpdate, db: Session = Depends(get_db)):
+def update_goal(goal_id: int, goal_in: GoalUpdate, db: Session = Depends(get_db)):
     db_goal = crud_goal.get(db=db, id=goal_id)
     if not db_goal:
         raise HTTPException(
@@ -65,7 +64,7 @@ def update_goal(goal_id: UUID, goal_in: GoalUpdate, db: Session = Depends(get_db
 
 
 @router.delete("/{goal_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_goal(goal_id: UUID, db: Session = Depends(get_db)):
+def delete_goal(goal_id: int, db: Session = Depends(get_db)):
     db_goal = crud_goal.get(db=db, id=goal_id)
     if not db_goal:
         raise HTTPException(

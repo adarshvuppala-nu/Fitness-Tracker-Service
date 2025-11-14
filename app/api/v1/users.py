@@ -1,5 +1,4 @@
 from typing import List
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -29,7 +28,7 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: UUID, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud_user.get(db=db, id=user_id)
     if not db_user:
         raise HTTPException(
@@ -45,7 +44,7 @@ def list_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}", response_model=UserResponse)
-def update_user(user_id: UUID, user_in: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
     db_user = crud_user.get(db=db, id=user_id)
     if not db_user:
         raise HTTPException(
@@ -70,7 +69,7 @@ def update_user(user_id: UUID, user_in: UserUpdate, db: Session = Depends(get_db
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(user_id: UUID, db: Session = Depends(get_db)):
+def delete_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud_user.get(db=db, id=user_id)
     if not db_user:
         raise HTTPException(

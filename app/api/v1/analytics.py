@@ -33,7 +33,7 @@ class WorkoutStreak(BaseModel):
 
 @router.get("/analytics/{user_id}", response_model=AnalyticsResponse)
 def get_user_analytics(
-    user_id: str,
+    user_id: int,
     days: int = 30,
     db: Session = Depends(get_db)
 ):
@@ -78,7 +78,7 @@ def get_user_analytics(
 
 
 @router.get("/streak/{user_id}", response_model=WorkoutStreak)
-def get_workout_streak(user_id: str, db: Session = Depends(get_db)):
+def get_workout_streak(user_id: int, db: Session = Depends(get_db)):
     """
     Calculate current and longest workout streak
     """
@@ -121,7 +121,7 @@ def get_workout_streak(user_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/export/{user_id}")
-def export_user_data(user_id: str, db: Session = Depends(get_db)):
+def export_user_data(user_id: int, db: Session = Depends(get_db)):
     """
     Export user data as CSV format
     """

@@ -1,6 +1,5 @@
 from datetime import date
 from typing import Optional, List
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -25,7 +24,7 @@ def create_progress(progress_in: ProgressCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{progress_id}", response_model=ProgressResponse)
-def get_progress(progress_id: UUID, db: Session = Depends(get_db)):
+def get_progress(progress_id: int, db: Session = Depends(get_db)):
     db_progress = crud_progress.get(db=db, id=progress_id)
     if not db_progress:
         raise HTTPException(
@@ -37,7 +36,7 @@ def get_progress(progress_id: UUID, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[ProgressResponse])
 def list_progress(
-    user_id: Optional[UUID] = None,
+    user_id: Optional[int] = None,
     metric: Optional[str] = None,
     date_from: Optional[date] = None,
     date_to: Optional[date] = None,
@@ -59,7 +58,7 @@ def list_progress(
 
 
 @router.put("/{progress_id}", response_model=ProgressResponse)
-def update_progress(progress_id: UUID, progress_in: ProgressUpdate, db: Session = Depends(get_db)):
+def update_progress(progress_id: int, progress_in: ProgressUpdate, db: Session = Depends(get_db)):
     db_progress = crud_progress.get(db=db, id=progress_id)
     if not db_progress:
         raise HTTPException(
@@ -70,7 +69,7 @@ def update_progress(progress_id: UUID, progress_in: ProgressUpdate, db: Session 
 
 
 @router.delete("/{progress_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_progress(progress_id: UUID, db: Session = Depends(get_db)):
+def delete_progress(progress_id: int, db: Session = Depends(get_db)):
     db_progress = crud_progress.get(db=db, id=progress_id)
     if not db_progress:
         raise HTTPException(

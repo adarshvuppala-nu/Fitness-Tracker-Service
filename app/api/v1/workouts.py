@@ -1,6 +1,5 @@
 from datetime import date
 from typing import Optional, List
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
@@ -25,7 +24,7 @@ def create_workout(workout_in: WorkoutCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{workout_id}", response_model=WorkoutResponse)
-def get_workout(workout_id: UUID, db: Session = Depends(get_db)):
+def get_workout(workout_id: int, db: Session = Depends(get_db)):
     db_workout = crud_workout.get(db=db, id=workout_id)
     if not db_workout:
         raise HTTPException(
@@ -37,7 +36,7 @@ def get_workout(workout_id: UUID, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[WorkoutResponse])
 def list_workouts(
-    user_id: Optional[UUID] = None,
+    user_id: Optional[int] = None,
     date_from: Optional[date] = None,
     date_to: Optional[date] = None,
     skip: int = 0,
@@ -57,7 +56,7 @@ def list_workouts(
 
 
 @router.put("/{workout_id}", response_model=WorkoutResponse)
-def update_workout(workout_id: UUID, workout_in: WorkoutUpdate, db: Session = Depends(get_db)):
+def update_workout(workout_id: int, workout_in: WorkoutUpdate, db: Session = Depends(get_db)):
     db_workout = crud_workout.get(db=db, id=workout_id)
     if not db_workout:
         raise HTTPException(
@@ -68,7 +67,7 @@ def update_workout(workout_id: UUID, workout_in: WorkoutUpdate, db: Session = De
 
 
 @router.delete("/{workout_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_workout(workout_id: UUID, db: Session = Depends(get_db)):
+def delete_workout(workout_id: int, db: Session = Depends(get_db)):
     db_workout = crud_workout.get(db=db, id=workout_id)
     if not db_workout:
         raise HTTPException(

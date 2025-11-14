@@ -116,7 +116,7 @@ export const getWorkoutRecommendation = async (userId) => {
 
 export const getUsers = async (skip = 0, limit = 100) => {
   try {
-    const response = await apiClient.get('/users', {
+    const response = await apiClient.get('/users/', {
       params: { skip, limit }
     });
     return Array.isArray(response.data) ? response.data : [];
@@ -149,7 +149,7 @@ export const getWorkouts = async (filters = {}) => {
   const { user_id, date_from, date_to, skip = 0, limit = 100 } = filters;
 
   try {
-    const response = await apiClient.get('/workout-sessions', {
+    const response = await apiClient.get('/workouts/', {
       params: { user_id, date_from, date_to, skip, limit }
     });
     return Array.isArray(response.data) ? response.data : [];
@@ -160,29 +160,29 @@ export const getWorkouts = async (filters = {}) => {
 };
 
 export const getWorkout = async (workoutId) => {
-  const response = await apiClient.get(`/workout-sessions/${workoutId}`);
+  const response = await apiClient.get(`/workouts/${workoutId}`);
   return response.data;
 };
 
 export const createWorkout = async (workoutData) => {
-  const response = await apiClient.post('/workout-sessions/', workoutData);
+  const response = await apiClient.post('/workouts/', workoutData);
   return response.data;
 };
 
 export const updateWorkout = async (workoutId, workoutData) => {
-  const response = await apiClient.put(`/workout-sessions/${workoutId}/`, workoutData);
+  const response = await apiClient.put(`/workouts/${workoutId}/`, workoutData);
   return response.data;
 };
 
 export const deleteWorkout = async (workoutId) => {
-  await apiClient.delete(`/workout-sessions/${workoutId}/`);
+  await apiClient.delete(`/workouts/${workoutId}/`);
 };
 
 export const getGoals = async (filters = {}) => {
   const { user_id, status, skip = 0, limit = 100 } = filters;
 
   try {
-    const response = await apiClient.get('/fitness-goals', {
+    const response = await apiClient.get('/goals/', {
       params: { user_id, status, skip, limit }
     });
     return Array.isArray(response.data) ? response.data : [];
@@ -193,50 +193,50 @@ export const getGoals = async (filters = {}) => {
 };
 
 export const getGoal = async (goalId) => {
-  const response = await apiClient.get(`/fitness-goals/${goalId}`);
+  const response = await apiClient.get(`/goals/${goalId}`);
   return response.data;
 };
 
 export const createGoal = async (goalData) => {
-  const response = await apiClient.post('/fitness-goals/', goalData);
+  const response = await apiClient.post('/goals/', goalData);
   return response.data;
 };
 
 export const updateGoal = async (goalId, goalData) => {
-  const response = await apiClient.put(`/fitness-goals/${goalId}/`, goalData);
+  const response = await apiClient.put(`/goals/${goalId}/`, goalData);
   return response.data;
 };
 
 export const deleteGoal = async (goalId) => {
-  await apiClient.delete(`/fitness-goals/${goalId}/`);
+  await apiClient.delete(`/goals/${goalId}/`);
 };
 
 export const getProgressMetrics = async (filters = {}) => {
   const { user_id, metric, date_from, date_to, skip = 0, limit = 100 } = filters;
 
-  const response = await apiClient.get('/progress-metrics', {
+  const response = await apiClient.get('/progress', {
     params: { user_id, metric, date_from, date_to, skip, limit }
   });
   return response.data;
 };
 
 export const getProgressMetric = async (progressId) => {
-  const response = await apiClient.get(`/progress-metrics/${progressId}`);
+  const response = await apiClient.get(`/progress/${progressId}`);
   return response.data;
 };
 
 export const createProgressMetric = async (progressData) => {
-  const response = await apiClient.post('/progress-metrics', progressData);
+  const response = await apiClient.post('/progress', progressData);
   return response.data;
 };
 
 export const updateProgressMetric = async (progressId, progressData) => {
-  const response = await apiClient.put(`/progress-metrics/${progressId}`, progressData);
+  const response = await apiClient.put(`/progress/${progressId}`, progressData);
   return response.data;
 };
 
 export const deleteProgressMetric = async (progressId) => {
-  await apiClient.delete(`/progress-metrics/${progressId}`);
+  await apiClient.delete(`/progress/${progressId}`);
 };
 
 export const getUserAnalytics = async (userId, days = 30) => {
