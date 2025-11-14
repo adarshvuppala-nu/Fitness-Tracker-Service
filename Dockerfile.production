@@ -1,0 +1,57 @@
+# Stage 1: Build Frontend
+FROM node:20-slim AS frontend-builder
+
+WORKDIR /frontend
+
+# Copy package files and install dependencies
+COPY frontend/package*.json ./
+RUN npm install --only=production && npm cache clean --force
+
+# Copy frontend source and build
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Final Production Image (Backend + Frontend)
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_HOME=/app
+
+WORKDIR ${APP_HOME}
+
+# Install system dependencies (NO PostgreSQL server - we have separate container!)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # PostgreSQL CLIENT only (to connect to separate postgres container)
+    libpq-dev \
+    postgresql-client \
+    # Build dependencies for Python packages
+    gcc \
+    g++ \
+    # Utilities
+    curl \
+    # Cleanup
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Install Python Dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Copy built frontend from stage 1 to static directory
+RUN mkdir -p ${APP_HOME}/app/static
+COPY --from=frontend-builder /frontend/dist ${APP_HOME}/app/static/
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+
+EXPOSE 8000
+
+# Start the FastAPI application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
