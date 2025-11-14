@@ -24,10 +24,21 @@ class Settings(BaseSettings):
     LANGFUSE_SECRET_KEY: str = ""
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"
 
+    # Security & Authentication
+    SECRET_KEY: str = "change-this-to-a-secret-key"
+    JWT_SECRET_KEY: str = "change-this-to-a-jwt-secret-key"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # Environment
+    DEBUG: bool = False
+    ENVIRONMENT: str = "development"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        case_sensitive=True
+        case_sensitive=True,
+        extra='ignore'  # Ignore extra environment variables like POSTGRES_USER, POSTGRES_PASSWORD, etc.
     )
 
 
